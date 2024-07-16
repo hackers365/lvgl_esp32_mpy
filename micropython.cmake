@@ -9,7 +9,8 @@ target_sources(usermod_lvgl_esp32 INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/src/wrapper.c
         ${CMAKE_CURRENT_LIST_DIR}/src/module.c
 )
-
+message("IDF路径:${IDF_PATH}")
+message("compoonents路径:${USER_COMPONENT_DIR}")
 target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/include/
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl

@@ -64,7 +64,6 @@ add_custom_command(
 if (NOT EXISTS ${LVGL_MPY})
     file(WRITE ${LVGL_MPY} "")
 endif ()
-
 add_library(usermod_lv_bindings INTERFACE)
 target_sources(usermod_lv_bindings INTERFACE ${LVGL_MPY})
 target_include_directories(usermod_lv_bindings INTERFACE ${LVGL_BINDINGS_DIR})

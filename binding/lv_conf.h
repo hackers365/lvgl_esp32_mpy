@@ -53,6 +53,10 @@
 /*Color depth: 8 (A8), 16 (RGB565), 24 (RGB888), 32 (XRGB8888)*/
 #define LV_COLOR_DEPTH 16
 
+#define LV_COLOR_16_SWAP 1
+
+#define LV_COLOR_SCREEN_TRANSP 0
+
 /*=========================
    STDLIB WRAPPER SETTINGS
  *=========================*/
@@ -96,7 +100,7 @@
  *====================*/
 
 /*Default display refresh, input device read and animation step period.*/
-#define LV_DEF_REFR_PERIOD  33      /*[ms]*/
+#define LV_DEF_REFR_PERIOD  10      /*[ms]*/
 
 /*Default Dot Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
  *(Not so important, you can adjust it to modify default sizes and spaces)*/
@@ -355,7 +359,11 @@ extern void mp_lv_init_gc();
 
 /* Adjust color mix functions rounding. GPUs might calculate color mix (blending) differently.
  * 0: round down, 64: round up from x.75, 128: round up from half, 192: round up from x.25, 254: round up */
-#define LV_COLOR_MIX_ROUND_OFS  0
+//#define LV_COLOR_MIX_ROUND_OFS  0
+#define LV_COLOR_MIX_ROUND_OFS (LV_COLOR_DEPTH == 32 ? 0: 128)
+
+ /*Images pixels with this color will not be drawn if they are chroma keyed)*/
+#define LV_COLOR_CHROMA_KEY lv_color_hex(0x00ff00)         /*pure green*/
 
 /* Add 2 x 32 bit variables to each lv_obj_t to speed up getting style properties */
 #define LV_OBJ_STYLE_CACHE      1
@@ -747,10 +755,10 @@ extern void mp_lv_init_gc();
 #define LV_USE_RLE 0
 
 /*QR code library*/
-#define LV_USE_QRCODE 1
+#define LV_USE_QRCODE 0
 
 /*Barcode code library*/
-#define LV_USE_BARCODE 1
+#define LV_USE_BARCODE 0
 
 /*FreeType library*/
 #ifdef MICROPY_FREETYPE
@@ -780,7 +788,7 @@ extern void mp_lv_init_gc();
 #ifdef MICROPY_RLOTTIE
     #define LV_USE_RLOTTIE MICROPY_RLOTTIE
 #else
-    #define LV_USE_RLOTTIE 0
+    #define LV_USE_RLOTTIE 1
 #endif
 
 /*Enable Vector Graphic APIs*/
