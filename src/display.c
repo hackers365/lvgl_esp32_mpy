@@ -143,7 +143,7 @@ static mp_obj_t lvgl_esp32_Display_deinit(mp_obj_t self_ptr)
         self->spi->device_count--;
 
         // We call deinit on spi in case it was (unsuccessfully) deleted earlier
-        lvgl_esp32_SPI_internal_deinit(self->spi);
+        lvgl_esp32_QSPI_internal_deinit(self->spi);
     }
 
     return mp_obj_new_int_from_uint(0);
