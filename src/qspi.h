@@ -1,5 +1,5 @@
-#ifndef __LVGL_ESP32_SPI_H__
-#define __LVGL_ESP32_SPI_H__
+#ifndef __LVGL_ESP32_QSPI_H__
+#define __LVGL_ESP32_QSPI_H__
 
 #include "py/obj.h"
 
@@ -30,4 +30,4 @@ void lvgl_esp32_QSPI_internal_deinit(lvgl_esp32_QSPI_obj_t* self);
 
 extern const mp_obj_type_t lvgl_esp32_QSPI_type;
 
-#endif /* __LVGL_ESP32_SPI_H__ */
+#endif /* __LVGL_ESP32_QSPI_H__ */
