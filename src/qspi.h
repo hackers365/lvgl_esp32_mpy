@@ -26,7 +26,7 @@ typedef struct lvgl_esp32_QSPI_obj_t{
     uint8_t device_count;
 } lvgl_esp32_QSPI_obj_t;
 
-void lvgl_esp32_SPI_internal_deinit(lvgl_esp32_QSPI_obj_t* self);
+void lvgl_esp32_QSPI_internal_deinit(lvgl_esp32_QSPI_obj_t* self);
 
 extern const mp_obj_type_t lvgl_esp32_QSPI_type;
 
