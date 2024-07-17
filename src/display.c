@@ -18,7 +18,7 @@
 static const char *TAG = "lvgl_esp32_display";
 
 // Bit number used to represent command and parameter
-#define LCD_CMD_BITS           8
+#define LCD_CMD_BITS           32
 #define LCD_PARAM_BITS         8
 
 static bool on_color_trans_done_cb(
@@ -75,7 +75,6 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 
     ESP_LOGI(TAG, "Setting up panel IO");
     esp_lcd_panel_io_spi_config_t io_config = {
-        .dc_gpio_num = self->dc,
         .cs_gpio_num = self->cs,
         .pclk_hz = self->pixel_clock,
         .lcd_cmd_bits = LCD_CMD_BITS,
@@ -84,8 +83,10 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
         .trans_queue_depth = 10,
         .on_color_trans_done = on_color_trans_done_cb,
         .user_ctx = self,
+        .flags = {
+           .quad_mode=1
+        }
     };
-
     ESP_ERROR_CHECK(
         esp_lcd_new_panel_io_spi(
             (esp_lcd_spi_bus_handle_t) self->spi->spi_host_device,
@@ -97,14 +98,14 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     // HACK
     self->spi->device_count++;
 
-    ESP_LOGI(TAG, "Setting up ST7789 panel driver");
+    ESP_LOGI(TAG, "Setting up ST77916 panel driver");
     esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = self->reset,
         .rgb_ele_order = self->bgr ? LCD_RGB_ELEMENT_ORDER_BGR : LCD_RGB_ELEMENT_ORDER_RGB,
         .bits_per_pixel = 16,
     };
 
-    ESP_ERROR_CHECK(esp_lcd_new_panel_st7789(self->io_handle, &panel_config, &self->panel));
+    ESP_ERROR_CHECK(esp_lcd_new_panel_st77916(self->io_handle, &panel_config, &self->panel));
     ESP_ERROR_CHECK(esp_lcd_panel_reset(self->panel));
     ESP_ERROR_CHECK(esp_lcd_panel_init(self->panel));
 
@@ -162,7 +163,6 @@ static mp_obj_t lvgl_esp32_Display_make_new(
         ARG_height,         // height of the display
         ARG_spi,            // configured SPI instance
         ARG_reset,          // RESET pin number
-        ARG_dc,             // DC pin number
         ARG_cs,             // CS pin number
         ARG_pixel_clock,    // Pixel clock in Hz
         ARG_swap_xy,        // swap X and Y axis
@@ -177,7 +177,6 @@ static mp_obj_t lvgl_esp32_Display_make_new(
         { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED },
         { MP_QSTR_spi, MP_ARG_OBJ | MP_ARG_REQUIRED },
         { MP_QSTR_reset, MP_ARG_INT | MP_ARG_REQUIRED },
-        { MP_QSTR_dc, MP_ARG_INT | MP_ARG_REQUIRED },
         { MP_QSTR_cs, MP_ARG_INT | MP_ARG_REQUIRED },
         { MP_QSTR_pixel_clock, MP_ARG_INT | MP_ARG_KW_ONLY, { .u_int = 20 * 1000 * 1000 }},
         { MP_QSTR_swap_xy, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
@@ -195,9 +194,8 @@ static mp_obj_t lvgl_esp32_Display_make_new(
     self->width = args[ARG_width].u_int;
     self->height = args[ARG_height].u_int;
 
-    self->spi = (lvgl_esp32_SPI_obj_t *) MP_OBJ_TO_PTR(args[ARG_spi].u_obj);
+    self->spi = (lvgl_esp32_QSPI_obj_t *) MP_OBJ_TO_PTR(args[ARG_spi].u_obj);
     self->reset = args[ARG_reset].u_int;
-    self->dc = args[ARG_dc].u_int;
     self->cs = args[ARG_cs].u_int;
     self->pixel_clock = args[ARG_pixel_clock].u_int;
 
