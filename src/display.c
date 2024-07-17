@@ -99,10 +99,18 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     self->spi->device_count++;
 
     ESP_LOGI(TAG, "Setting up ST77916 panel driver");
+    ST77916_vendor_config_t vendor_config = {
+            // .init_cmds = lcd_init_cmds,         // Uncomment these line if use custom initialization commands
+            // .init_cmds_size = sizeof(lcd_init_cmds) / sizeof(ST77916_lcd_init_cmd_t),
+            .flags = {
+                    .use_qspi_interface = 1,
+            },
+    };
     esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = self->reset,
         .rgb_ele_order = self->bgr ? LCD_RGB_ELEMENT_ORDER_BGR : LCD_RGB_ELEMENT_ORDER_RGB,
         .bits_per_pixel = 16,
+        .vendor_config = &vendor_config
     };
 
     ESP_ERROR_CHECK(esp_lcd_new_panel_st77916(self->io_handle, &panel_config, &self->panel));
