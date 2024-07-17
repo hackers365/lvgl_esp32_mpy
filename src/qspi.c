@@ -19,7 +19,7 @@ static mp_obj_t lvgl_esp32_QSPI_init(mp_obj_t self_ptr)
         .data1_io_num = self->data1,
         .data2_io_num = self->data2,
         .data3_io_num = self->data3,
-        .max_transfer_sz = self->max_trans_sz
+        .max_transfer_sz = self->max_trans_s
     };
 
     ESP_ERROR_CHECK(spi_bus_initialize(self->spi_host_device, &bus_config, SPI_DMA_CH_AUTO));
