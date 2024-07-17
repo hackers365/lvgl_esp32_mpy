@@ -99,7 +99,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     self->spi->device_count++;
 
     ESP_LOGI(TAG, "Setting up ST77916 panel driver");
-    ST77916_vendor_config_t vendor_config = {
+    st77916_vendor_config_t vendor_config = {
             // .init_cmds = lcd_init_cmds,         // Uncomment these line if use custom initialization commands
             // .init_cmds_size = sizeof(lcd_init_cmds) / sizeof(ST77916_lcd_init_cmd_t),
             .flags = {
