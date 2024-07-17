@@ -1,7 +1,7 @@
 #include "display.h"
 #include "wrapper.h"
 #include "spi.h"
-
+#include "qspi.h"
 static const mp_rom_map_elem_t lvgl_esp32_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_lvgl_esp32) },
     { MP_ROM_QSTR(MP_QSTR_SPI), MP_ROM_PTR(&lvgl_esp32_SPI_type) },
