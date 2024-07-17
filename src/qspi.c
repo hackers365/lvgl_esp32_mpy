@@ -147,7 +147,7 @@ static MP_DEFINE_CONST_DICT(lvgl_esp32_QSPI_locals, lvgl_esp32_QSPI_locals_table
 
 MP_DEFINE_CONST_OBJ_TYPE(
     lvgl_esp32_QSPI_type,
-    MP_QSTR_SPI,
+    MP_QSTR_QSPI,
     MP_TYPE_FLAG_NONE,
     make_new,
     lvgl_esp32_QSPI_make_new,
