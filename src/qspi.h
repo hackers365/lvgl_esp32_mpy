@@ -5,7 +5,7 @@
 
 #include "hal/spi_types.h"
 
-{
+typedef struct lvgl_esp32_QSPI_obj_t{
     mp_obj_base_t base;
 
     spi_host_device_t spi_host_device;
