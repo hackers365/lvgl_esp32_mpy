@@ -1,27 +1,29 @@
 import lvgl_esp32
 
 # Adapt these values for your own configuration
-spi = lvgl_esp32.SPI(
+spi = lvgl_esp32.QSPI(
     2,
     baudrate=80_000_000,
-    sck=7,
-    mosi=6,
-    miso=8,
+    sck=9,
+    data0=11,
+    data1=12,
+    data2=13,
+    data3=14,
 )
 spi.init()
 
 display = lvgl_esp32.Display(
     spi=spi,
-    width=296,
-    height=240,
-    swap_xy=True,
+    width=360,
+    height=360,
+    swap_xy=False,
     mirror_x=False,
     mirror_y=False,
-    invert=False,
+    invert=True,
     bgr=True,
-    reset=48,
-    dc=4,
-    cs=5,
-    pixel_clock=20_000_000,
+    reset=47,
+    dc=-1,
+    cs=10,
+    pixel_clock=50_000_000,
 )
 display.init()
