@@ -9,9 +9,10 @@ spi = lvgl_esp32.QSPI(
     data1=12,
     data2=13,
     data3=14,
+    max_transfer_s=int(360*80*16/8)
 )
 spi.init()
-
+print("SPI INITED")
 display = lvgl_esp32.Display(
     spi=spi,
     width=360,
@@ -22,7 +23,6 @@ display = lvgl_esp32.Display(
     invert=True,
     bgr=True,
     reset=47,
-    dc=-1,
     cs=10,
     pixel_clock=50_000_000,
 )
