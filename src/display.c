@@ -76,6 +76,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     ESP_LOGI(TAG, "Setting up panel IO");
     esp_lcd_panel_io_spi_config_t io_config = {
         .cs_gpio_num = self->cs,
+        .dc_gpio_num=-1,
         .pclk_hz = self->pixel_clock,
         .lcd_cmd_bits = LCD_CMD_BITS,
         .lcd_param_bits = LCD_PARAM_BITS,
