@@ -5,13 +5,55 @@
 #include "py/runtime.h"
 
 static const char *TAG = "lvgl_esp32_wrapper";
+void lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
+    // RGB666 格式每个像素占 24 位，因此需要将缓冲区大小除以 3 以得到像素数量
+    uint32_t u32_cnt = buf_size_px / 3;
+    uint8_t * buf8 = buf;  // 8位指针
 
+    // 处理32位块（实际上是24位），每次处理8个像素
+    while (u32_cnt >= 8) {
+        uint8_t temp;
+
+        // 交换每个像素的字节
+        for (int i = 0; i < 8; i++) {
+            // 交换 RGB666 中的 R 和 B（8位）
+            temp = buf8[0];
+            buf8[0] = buf8[2];
+            buf8[2] = temp;
+            buf8 += 3;
+        }
+        u32_cnt -= 8;
+    }
+
+    // 处理剩余的像素
+    while (u32_cnt) {
+        uint8_t temp;
+
+        // 交换 RGB666 中的 R 和 B（8位）
+        temp = buf8[0];
+        buf8[0] = buf8[2];
+        buf8[2] = temp;
+        buf8 += 3;
+        u32_cnt--;
+    }
+
+    // 处理最后一个像素（如果有）
+    if (buf_size_px % 3 != 0) {
+        uint8_t e = buf_size_px - (buf_size_px % 3);
+        uint8_t temp;
+
+        // 交换 RGB666 中的 R 和 B（8位）
+        temp = buf8[e];
+        buf8[e] = buf8[e + 2];
+        buf8[e + 2] = temp;
+    }
+}
 static void flush_cb(lv_display_t *display, const lv_area_t *area, uint8_t *data)
 {
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) lv_display_get_user_data(display);;
     ESP_LOGI(TAG, "flush_cb: x1=%ld.y1=%ld.x2=%ld.y2=%ld",area->x1,area->y1,area->x2+1,area->y2+1);
     // Correct byte order
-    lv_draw_sw_rgb565_swap(data, self->buf_size);
+    lv_draw_sw_rgb666_swap(data, self->buf_size);
 
     // Blit to the screen
     lvgl_esp32_Display_draw_bitmap(self->display, area->x1, area->y1, area->x2 + 1, area->y2 + 1, data);
