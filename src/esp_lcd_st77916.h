@@ -13,6 +13,9 @@
 extern "C" {
 #endif
 
+#define ESP_LCD_ST77916_VER_MAJOR    (0)
+#define ESP_LCD_ST77916_VER_MINOR    (0)
+#define ESP_LCD_ST77916_VER_PATCH    (2)
 /**
  * @brief LCD panel initialization commands.
  *
