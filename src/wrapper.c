@@ -6,6 +6,7 @@
 
 static const char *TAG = "lvgl_esp32_wrapper";
 void lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
+    ESP_LOGI(TAG, "flush_cb: lv_draw_sw_rgb666_swap");
     // RGB666 格式每个像素占 24 位，因此需要将缓冲区大小除以 3 以得到像素数量
     uint32_t u32_cnt = buf_size_px / 3;
     uint8_t * buf8 = buf;  // 8位指针
