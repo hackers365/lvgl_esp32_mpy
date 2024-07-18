@@ -121,8 +121,7 @@ esp_err_t esp_lcd_new_panel_st77916(const esp_lcd_panel_io_handle_t io, const es
     *ret_panel = &(st77916->base);
     ESP_LOGD(TAG, "new st77916 panel @%p", st77916);
 
-    ESP_LOGI(TAG, "LCD panel create success, version: %d.%d.%d", 0, 0,
-             2);
+    ESP_LOGI(TAG, "LCD panel create success, version: %d.%d.%d", 0, 0,2);
 
     return ESP_OK;
 
