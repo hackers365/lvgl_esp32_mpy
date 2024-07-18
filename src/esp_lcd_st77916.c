@@ -18,7 +18,6 @@
 #include "esp_lcd_panel_commands.h"
 #include "esp_log.h"
 
-#include "esp_lcd_custom_types.h"
 #include "esp_lcd_st77916.h"
 
 #define LCD_OPCODE_WRITE_CMD        (0x02ULL)
