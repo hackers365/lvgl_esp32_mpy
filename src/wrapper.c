@@ -58,6 +58,7 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
     self->display->transfer_done_user_data = (void *) self;
     lv_display_set_flush_cb(self->lv_display, flush_cb);
     lv_display_set_user_data(self->lv_display, self);
+    lv_display_set_resolution(self->lv_display,self->display->width,self->display->height);
     lv_tick_set_cb(tick_get_cb);
 
     return mp_obj_new_int_from_uint(0);
