@@ -6,9 +6,9 @@
 #pragma once
 
 #include <stdint.h>
-
-#include "esp_lcd_panel_vendor.h"
-
+#include "esp_lcd_panel_rgb.h"
+#include "soc/soc_caps.h"
+#include "sdkconfig.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
