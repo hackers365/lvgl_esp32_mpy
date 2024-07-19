@@ -49,7 +49,25 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
     ESP_LOGI(TAG,"Initializing IO for display touch");
     esp_lcd_panel_io_i2c_config_t tp_io_config = ESP_LCD_TOUCH_IO_I2C_CST816S_CONFIG();
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_i2c((esp_lcd_i2c_bus_handle_t)self->ic2_num, &tp_io_config, &self->tp_io_handle));
-    esp_lcd_touch_config_t tp_cfg=ESP_PANEL_TOUCH_CONFIG_DEFAULT(self->width,self->height,self->rst,self->inte,self->swap_xy,self->mirror_x,self->mirror_y);
+    esp_lcd_touch_config_t tp_cfg= {
+        .x_max = self->width,
+        .y_max = self->height,
+        .rst_gpio_num = (gpio_num_t)self->rst,
+        .int_gpio_num = (gpio_num_t)self->inte,
+        .levels = {
+            .reset = 0,
+            .interrupt = 0,
+        },
+        .flags = {
+            .swap_xy = self->swap_xy,
+            .mirror_x = self->mirror_x,
+            .mirror_y = self->mirror_y,
+        },
+        .process_coordinates = NULL,
+        .interrupt_callback = NULL,
+        .user_data = NULL,
+        .driver_data = NULL,
+    };
     ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &self->tp));
     ESP_LOGI(TAG,"Initializing display touch Finish");
     return mp_obj_new_int_from_uint(0);
