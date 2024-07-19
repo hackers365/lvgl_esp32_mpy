@@ -55,7 +55,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
         .x_max = self->width,
         .y_max = self->height,
         .rst_gpio_num = (gpio_num_t)self->rst,
-        .int_gpio_num = (gpio_num_t)self->inte,
+        .int_gpio_num = (gpio_num_t)self->inter,
         .levels = {
             .reset = 0,
             .interrupt = 0,
