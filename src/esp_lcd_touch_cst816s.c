@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "ESP_PanelLog.h"
-
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,8 +17,6 @@
 #include "esp_check.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_touch.h"
-
-#include "esp_lcd_touch_cst816s.h"
 
 #define POINT_NUM_MAX       (1)
 
@@ -44,8 +40,6 @@ esp_err_t esp_lcd_touch_new_i2c_cst816s(const esp_lcd_panel_io_handle_t io, cons
     ESP_RETURN_ON_FALSE(config, ESP_ERR_INVALID_ARG, TAG, "Invalid config");
     ESP_RETURN_ON_FALSE(tp, ESP_ERR_INVALID_ARG, TAG, "Invalid touch handle");
 
-    ESP_PANEL_ENABLE_TAG_DEBUG_LOG();
-
     /* Prepare main structure */
     esp_err_t ret = ESP_OK;
     esp_lcd_touch_handle_t cst816s = calloc(1, sizeof(esp_lcd_touch_t));
@@ -65,9 +59,9 @@ esp_err_t esp_lcd_touch_new_i2c_cst816s(const esp_lcd_panel_io_handle_t io, cons
     /* Prepare pin for touch interrupt */
     if (cst816s->config.int_gpio_num != GPIO_NUM_NC) {
         const gpio_config_t int_gpio_config = {
-            .mode = GPIO_MODE_INPUT,
-            .intr_type = (cst816s->config.levels.interrupt ? GPIO_INTR_POSEDGE : GPIO_INTR_NEGEDGE),
-            .pin_bit_mask = BIT64(cst816s->config.int_gpio_num)
+                .mode = GPIO_MODE_INPUT,
+                .intr_type = (cst816s->config.levels.interrupt ? GPIO_INTR_POSEDGE : GPIO_INTR_NEGEDGE),
+                .pin_bit_mask = BIT64(cst816s->config.int_gpio_num)
         };
         ESP_GOTO_ON_ERROR(gpio_config(&int_gpio_config), err, TAG, "GPIO intr config failed");
 
@@ -79,8 +73,8 @@ esp_err_t esp_lcd_touch_new_i2c_cst816s(const esp_lcd_panel_io_handle_t io, cons
     /* Prepare pin for touch controller reset */
     if (cst816s->config.rst_gpio_num != GPIO_NUM_NC) {
         const gpio_config_t rst_gpio_config = {
-            .mode = GPIO_MODE_OUTPUT,
-            .pin_bit_mask = BIT64(cst816s->config.rst_gpio_num)
+                .mode = GPIO_MODE_OUTPUT,
+                .pin_bit_mask = BIT64(cst816s->config.rst_gpio_num)
         };
         ESP_GOTO_ON_ERROR(gpio_config(&rst_gpio_config), err, TAG, "GPIO reset config failed");
     }
@@ -90,11 +84,8 @@ esp_err_t esp_lcd_touch_new_i2c_cst816s(const esp_lcd_panel_io_handle_t io, cons
     ESP_GOTO_ON_ERROR(read_id(cst816s), err, TAG, "Read version failed");
     *tp = cst816s;
 
-    ESP_LOGI(TAG, "LCD touch panel create success, version: %d.%d.%d", ESP_LCD_TOUCH_CST816S_VER_MAJOR, ESP_LCD_TOUCH_CST816S_VER_MINOR,
-             ESP_LCD_TOUCH_CST816S_VER_PATCH);
-
     return ESP_OK;
-err:
+    err:
     if (cst816s) {
         del(cst816s);
     }
