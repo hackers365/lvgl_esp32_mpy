@@ -3,7 +3,6 @@
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "py/runtime.h"
-#include "touch.c"
 static const char *TAG = "lvgl_esp32_wrapper";
 static void lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
     //ESP_LOGI(TAG, "flush_cb: lv_draw_sw_rgb666_swap");
