@@ -66,6 +66,10 @@ static void transfer_done_cb(void *user_data)
     lv_disp_flush_ready(self->lv_display);
 }
 
+static void touch_read_cb(lv_indev_drv_t *indev_drv, lv_indev_data_t *data){
+    lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
+
+}
 static uint32_t tick_get_cb()
 {
     return esp_timer_get_time() / 1000;
@@ -102,6 +106,15 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
     lv_display_set_flush_cb(self->lv_display, flush_cb);
     lv_display_set_user_data(self->lv_display, self);
     lv_display_set_resolution(self->lv_display,self->display->width,self->display->height);
+    //初始化输入驱动
+    ESP_LOGI(TAG, "Initializing LVGL Touch Input CST816S");
+
+    self->lv_indev=lv_indev_create();
+    lv_indev_set_type(self->lv_indev, LV_INDEV_TYPE_POINTER);
+    lv_indev_set_user_data(self->lv_indev,(void *) self);
+    lv_indev_set_read_cb(self->lv_indev, touch_read_cb);
+
+    ESP_LOGI(TAG, "Initializing LVGL Tick callback function");
     lv_tick_set_cb(tick_get_cb);
 
     return mp_obj_new_int_from_uint(0);
@@ -118,6 +131,13 @@ static mp_obj_t lvgl_esp32_Wrapper_deinit(mp_obj_t self_ptr)
     lv_tick_set_cb(NULL);
     self->display->transfer_done_cb = NULL;
     self->display->transfer_done_user_data = NULL;
+
+    if (self->lv_indev != NULL)
+    {
+        ESP_LOGI(TAG, "Deleting LVGL indev");
+        lv_indev_delete(self->lv_indev);
+        self->lv_display = NULL;
+    }
 
     if (self->lv_display != NULL)
     {
@@ -160,10 +180,13 @@ static mp_obj_t lvgl_esp32_Wrapper_make_new(
     enum
     {
         ARG_display,      // a display instance
+        ARG_touch,//a touch instance
     };
 
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_display, MP_ARG_OBJ | MP_ARG_REQUIRED },
+        { MP_QSTR_touch, MP_ARG_OBJ | MP_ARG_REQUIRED },
+
     };
 
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
@@ -175,15 +198,19 @@ static mp_obj_t lvgl_esp32_Wrapper_make_new(
     {
         mp_raise_ValueError(MP_ERROR_TEXT("Expecting a Display object"));
     }
-
+    if (mp_obj_get_type(args[ARG_touch].u_obj) != &lvgl_esp32_Touch_type)
+    {
+        mp_raise_ValueError(MP_ERROR_TEXT("Expecting a Touch object"));
+    }
     self->display = (lvgl_esp32_Display_obj_t *) MP_OBJ_TO_PTR(args[ARG_display].u_obj);
+    self->touch = (lvgl_esp32_Touch_obj_t *) MP_OBJ_TO_PTR(args[ARG_touch].u_obj);
 
     self->buf_size = 0;
     self->buf1 = NULL;
     self->buf2 = NULL;
 
     self->lv_display = NULL;
-
+    self->lv_indev = NULL;
     return MP_OBJ_FROM_PTR(self);
 }
 
