@@ -1,5 +1,5 @@
 file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c)
-file(GLOB_RECURSE EXAMPLE_SOURCES ${LVGL_ROOT_DIR}/examples/*.c)
+#file(GLOB_RECURSE EXAMPLE_SOURCES ${LVGL_ROOT_DIR}/examples/*.c)
 # With micropython, build lvgl as interface library, link chain is:
 # lvgl_interface [lvgl] → usermod_lvgl_bindings [lv_bindings] → usermod
 # [micropython] → firmware [micropython]
