@@ -231,7 +231,7 @@ void lvgl_esp32_Display_draw_bitmap(
 {
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
 }
-void brightness(lvgl_esp32_Display_obj_t *self,int brightness){
+void lvgl_esp32_Display_brightness(lvgl_esp32_Display_obj_t *self,int percent){
     uint32_t duty_cycle = (BIT(self->ledc_timer.duty_resolution) * percent) / 100;
     ledc_channel_t channel = self->ledc_channel.channel;
     ledc_mode_t mode = self->ledc_channel.speed_mode;
@@ -336,7 +336,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
             .freq_hz         = 5000,              // PWM频率
             .speed_mode      = LEDC_LOW_SPEED_MODE,
             .timer_num       = LEDC_TIMER_0,
-             .clk_cfg = LEDC_AUTO_CLK
+            .clk_cfg = LEDC_AUTO_CLK
     };
 
     ledc_timer_config(&self->ledc_timer);

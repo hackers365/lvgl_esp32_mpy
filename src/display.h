@@ -46,8 +46,8 @@ void lvgl_esp32_Display_draw_bitmap(
     int y_end,
     const void *data
 );
-void brightness(
+void lvgl_esp32_Display_brightness(
         lvgl_esp32_Display_obj_t *self,
-        int brightness);
+        int percent);
 
 #endif /* __LVGL_ESP32_DISPLAY_H__ */
