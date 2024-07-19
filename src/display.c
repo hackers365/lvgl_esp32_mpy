@@ -250,7 +250,7 @@ static mp_obj_t lvgl_esp32_Display_mirrorX(mp_obj_t self_ptr,mp_obj_t en)
     return mp_const_none;
 }
 
-static mp_obj_t lvgl_esp32_Display_mirrorY(mp_obj_t self_ptr,mp_obj_t percent en)
+static mp_obj_t lvgl_esp32_Display_mirrorY(mp_obj_t self_ptr,mp_obj_t  en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
