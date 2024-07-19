@@ -349,7 +349,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     ledc_channel_config(&self->ledc_channel);
 
     // 设置初始背光亮度
-    brightness(self,100);
+    brightness(self,0);
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_init_obj, lvgl_esp32_Display_init);
