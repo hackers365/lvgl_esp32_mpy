@@ -464,7 +464,7 @@ static esp_err_t panel_st77916_init(esp_lcd_panel_t *panel)
             is_user_set = ((uint8_t *)init_cmds[i].data)[0] == ST77916_PARAM_SET ? true : false;
         }
     }
-    ESP_LOG(TAG, "send init commands success");
+    ESP_LOGD(TAG, "send init commands success");
 
     return ESP_OK;
 }
