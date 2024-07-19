@@ -4,6 +4,13 @@
 #include "touch.h"
 
 #include "py/runtime.h"
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_timer.h"
+#include "esp_err.h"
+#include "esp_log.h"
 
 static const char *TAG = "lvgl_esp32_touch";
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
