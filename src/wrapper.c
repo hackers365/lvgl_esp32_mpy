@@ -65,7 +65,8 @@ static void transfer_done_cb(void *user_data)
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
     lv_disp_flush_ready(self->lv_display);
 }
-static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
+static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *user_data){
+
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
 
 }
