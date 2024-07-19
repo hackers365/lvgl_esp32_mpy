@@ -108,12 +108,12 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
         ARG_scl,          // width of the Touch
         ARG_sda,         // height of the Touch
         ARG_rst,            // configured SPI instance
+        ARG_inter,          // RESET pin number
         ARG_width,          // width of the display
         ARG_height,         // height of the display
         ARG_swap_xy,        // swap X and Y axis
         ARG_mirror_x,       // mirror on X axis
         ARG_mirror_y,       // mirror on Y axis
-        ARG_inter,          // RESET pin number
         ARG_i2c_num,
 
     };
@@ -122,12 +122,12 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
             { MP_QSTR_scl, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_sda, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_rst, MP_ARG_INT | MP_ARG_REQUIRED },
+            { MP_QSTR_inter, MP_ARG_INT | MP_ARG_REQUIRED},
             { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_swap_xy, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
             { MP_QSTR_mirror_x, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
             { MP_QSTR_mirror_y, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
-            { MP_QSTR_inter, MP_ARG_INT | MP_ARG_KW_ONLY, { .u_int = GPIO_NUM_NC}},
             { MP_QSTR_i2c_num, MP_ARG_INT | MP_ARG_KW_ONLY, { .u_int = I2C_NUM_0}},
 
     };
