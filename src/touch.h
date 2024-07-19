@@ -5,6 +5,30 @@
 #ifndef __LVGL_ESP32__TOUCH_H
 #define __LVGL_ESP32__TOUCH_H
 #include "py/obj.h"
+#include "driver/gpio.h"
+#include "esp_lcd_types.h"
+#include "esp_lcd_touch.h"
+#include "esp_lcd_touch_cst816s.h"
+#define ESP_PANEL_TOUCH_CONFIG_DEFAULT(width, height, rst_io, int_io,swap_xy,mirror_x,mirror_y) \
+    {                                           \
+        .x_max = width,                         \
+        .y_max = height,                        \
+        .rst_gpio_num = (gpio_num_t)rst_io,     \
+        .int_gpio_num = (gpio_num_t)int_io,     \
+        .levels = {                             \
+            .reset = 0,                         \
+            .interrupt = 0,                     \
+        },                                      \
+        .flags = {                              \
+            .swap_xy = swap_xy,                       \
+            .mirror_x = mirror_x,                      \
+            .mirror_y = mirror_y,                      \
+        },                                      \
+        .process_coordinates = NULL,            \
+        .interrupt_callback = NULL,             \
+        .user_data = NULL,                      \
+        .driver_data = NULL,                    \
+    }
 typedef struct lvgl_esp32_Touch_obj_t
 {
     mp_obj_base_t base;
@@ -12,6 +36,14 @@ typedef struct lvgl_esp32_Touch_obj_t
     uint8_t sda;
     uint8_t inter;
     uint8_t rst;
+    uint8_t ic2_num;
+    uint16_t width;
+    uint16_t height;
+    bool swap_xy;
+    bool mirror_x;
+    bool mirror_y;
+    esp_lcd_touch_handle_t tp ;
+    esp_lcd_panel_io_handle_t tp_io_handle ;
 } lvgl_esp32_Touch_obj_t;
 
 extern const mp_obj_type_t lvgl_esp32_Touch_type;
