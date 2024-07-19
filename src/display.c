@@ -488,7 +488,10 @@ static const mp_rom_map_elem_t lvgl_esp32_Display_locals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&lvgl_esp32_Display_init_obj) },
     { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_Display_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_Display_deinit_obj) },
-    {MP_ROM_QSTR(MP_QSTR_brightness),MP_ROM_PTR(&lvgl_esp32_Display_brightness_obj)}
+    {MP_ROM_QSTR(MP_QSTR_brightness),MP_ROM_PTR(&lvgl_esp32_Display_brightness_obj)},
+    {MP_ROM_QSTR(MP_QSTR_swapXY),MP_ROM_PTR(&lvgl_esp32_Display_swapXY_obj)},
+    {MP_ROM_QSTR(MP_QSTR_mirrorX),MP_ROM_PTR(&lvgl_esp32_Display_mirrorX_obj)},
+    {MP_ROM_QSTR(MP_QSTR_mirrorY),MP_ROM_PTR(&lvgl_esp32_Display_mirrorY_obj)}
 };
 
 static MP_DEFINE_CONST_DICT(lvgl_esp32_Display_locals, lvgl_esp32_Display_locals_table);
