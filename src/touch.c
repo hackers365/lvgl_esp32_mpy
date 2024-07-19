@@ -42,7 +42,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
 {
     enum
     {
-        ARG_scl          // width of the Touch
+        ARG_scl,          // width of the Touch
         ARG_sda,         // height of the Touch
         ARG_rst,            // configured SPI instance
         ARG_inter,          // RESET pin number
