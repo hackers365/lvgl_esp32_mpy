@@ -1,5 +1,3 @@
-from machine import Pin, PWM
-pwm = PWM(Pin(15), freq=5000)
 
 
 from hardware import display
@@ -9,6 +7,8 @@ import lvgl_esp32
 import os
 wrapper = lvgl_esp32.Wrapper(display)
 wrapper.init()
+from machine import Pin, PWM
+pwm = PWM(Pin(15), freq=5000)
 screen = lv.screen_active()
 screen.set_style_bg_color(lv.color_hex(0xFF0000), lv.PART.MAIN | lv.STATE.DEFAULT)
 screen.set_style_bg_opa(255, lv.PART.MAIN | lv.STATE.DEFAULT)

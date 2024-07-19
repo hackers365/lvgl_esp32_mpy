@@ -15,10 +15,8 @@ target_sources(lvgl_interface INTERFACE ${SOURCES})
 # lv_style_transition_dsc_t_path_xcb_callback(const lv_anim_t * arg0) |
 # ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 target_compile_options(lvgl_interface INTERFACE -Wno-unused-function)
-#[[
 target_include_directories(lvgl_interface INTERFACE
 		${USER_COMPONENT_DIR}/rlottie/rlottie/inc
 	${IDF_PATH}/components/heap/include
 
 )
-]]

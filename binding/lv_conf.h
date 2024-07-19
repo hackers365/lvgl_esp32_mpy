@@ -788,14 +788,14 @@ extern void mp_lv_init_gc();
 #ifdef MICROPY_RLOTTIE
     #define LV_USE_RLOTTIE MICROPY_RLOTTIE
 #else
-    #define LV_USE_RLOTTIE 0
+    #define LV_USE_RLOTTIE 1
 #endif
 
 /*Enable Vector Graphic APIs*/
-#define LV_USE_VECTOR_GRAPHIC  1
+#define LV_USE_VECTOR_GRAPHIC  0
 
 /* Enable ThorVG (vector graphics library) from the src/libs folder */
-#define LV_USE_THORVG_INTERNAL 1
+#define LV_USE_THORVG_INTERNAL 0
 
 /* Enable ThorVG by assuming that its installed and linked to the project */
 #define LV_USE_THORVG_EXTERNAL 0
