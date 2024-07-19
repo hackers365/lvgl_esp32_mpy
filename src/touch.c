@@ -1,6 +1,10 @@
 //
 // Created by apexracing on 2024/7/19.
 //
+#include "touch.h"
+
+#include "py/runtime.h"
+
 static const char *TAG = "lvgl_esp32_touch";
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
 {
