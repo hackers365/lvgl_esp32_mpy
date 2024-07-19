@@ -24,6 +24,7 @@ display = lvgl_esp32.Display(
     bgr=False,
     reset=47,
     cs=10,
+    blk=15,
     pixel_clock=50_000_000,
 )
 display.init()
