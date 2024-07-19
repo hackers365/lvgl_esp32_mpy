@@ -74,8 +74,9 @@ static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
         uint8_t touch_cnt = 0;
         esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS)
         if(touch_cnt>0){
-            data->point.x = point.x;
-            data->point.y = point.y;
+            ESP_LOGI(TAG,"Touching num=%d,x=%d,y=%d",touch_cnt,touch_x[0],touch_y[0]);
+            data->point.x = touch_x[0];
+            data->point.y = touch_y[0];
             data->state = LV_INDEV_STATE_PRESSED;
         }
         else
