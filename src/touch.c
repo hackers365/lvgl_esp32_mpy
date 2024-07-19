@@ -81,7 +81,7 @@ static mp_obj_t lvgl_esp32_Touch_deinit(mp_obj_t self_ptr)
     {
         ESP_LOGI(TAG, "Deinitializing Touch driver");
         ESP_ERROR_CHECK(del(self->tp));
-        self->panel = NULL;
+        self->tp = NULL;
     }
 
     if(self->tp_io_handle != NULL)
