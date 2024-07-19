@@ -231,13 +231,19 @@ void lvgl_esp32_Display_draw_bitmap(
 {
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
 }
-void lvgl_esp32_Display_brightness(lvgl_esp32_Display_obj_t *self,int percent){
+static void  brightness(lvgl_esp32_Display_obj_t *self,int brightness){
     uint32_t duty_cycle = (BIT(self->ledc_timer.duty_resolution) * percent) / 100;
     ledc_channel_t channel = self->ledc_channel.channel;
     ledc_mode_t mode = self->ledc_channel.speed_mode;
     // 设置占空比
     ESP_ERROR_CHECK(ledc_set_duty(mode, channel, duty_cycle));
     ESP_ERROR_CHECK(ledc_update_duty(mode, channel));
+}
+static mp_obj_t lvgl_esp32_Display_brightness(mp_obj_t self_ptr,mp_obj_t percent){
+    lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    int val=mp_obj_get_int(percent);
+    brightness(self,val);
+    return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
 
