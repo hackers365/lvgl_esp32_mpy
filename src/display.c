@@ -231,7 +231,7 @@ void lvgl_esp32_Display_draw_bitmap(
 {
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
 }
-static void  brightness(lvgl_esp32_Display_obj_t *self,int brightness){
+static void  brightness(lvgl_esp32_Display_obj_t *self,int percent){
     uint32_t duty_cycle = (BIT(self->ledc_timer.duty_resolution) * percent) / 100;
     ledc_channel_t channel = self->ledc_channel.channel;
     ledc_mode_t mode = self->ledc_channel.speed_mode;
