@@ -61,7 +61,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     lvgl_esp32_Touch_obj_t *self = mp_obj_malloc_with_finaliser(lvgl_esp32_Touch_obj_t, &lvgl_esp32_Touch_type);
 
     self->scl = args[ARG_scl].u_int;
-    self->ARG_sda = args[ARG_sda].u_int;
+    self->sda = args[ARG_sda].u_int;
 
     self->rst = args[ARG_rst].u_int;
     self->inter = args[ARG_inter].u_int;
