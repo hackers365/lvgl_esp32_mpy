@@ -21,10 +21,9 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/interface/
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
+        /usr/include/usr/include
 )
-find_package(PNG REQUIRED)
-include_directories(${PNG_INCLUDE_DIR})
-target_link_libraries(usermod_lvgl_esp32 PRIVATE ${PNG_LIBRARIES})
+target_link_libraries(usermod_lvgl_esp32 PRIVATE png)
 
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 
