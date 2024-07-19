@@ -244,7 +244,7 @@ static mp_obj_t lvgl_esp32_Display_mirrorX(mp_obj_t self_ptr,mp_obj_t en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_ERROR_CHECK(esp_lcd_panel_mirror(self->panel, mp_obj_is_true(en), self->mirror_x));
+    ESP_ERROR_CHECK(esp_lcd_panel_mirror(self->panel, mp_obj_is_true(en), self->mirror_y));
     self->mirror_x = mp_obj_is_true(en);
 
     return mp_const_none;
@@ -254,7 +254,7 @@ static mp_obj_t lvgl_esp32_Display_mirrorY(mp_obj_t self_ptr,mp_obj_t  en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_ERROR_CHECK(esp_lcd_panel_mirror(self->panel, self->mirror_y, mp_obj_is_true(en)));
+    ESP_ERROR_CHECK(esp_lcd_panel_mirror(self->panel, self->mirror_x, mp_obj_is_true(en)));
     self->mirror_y = mp_obj_is_true(en);
 
     return mp_const_none;
