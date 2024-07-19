@@ -119,7 +119,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     };
 
     static const mp_arg_t allowed_args[] = {
-            { MP_QSTR_sl, MP_ARG_INT | MP_ARG_REQUIRED },
+            { MP_QSTR_scl, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_sda, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_rst, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED },
