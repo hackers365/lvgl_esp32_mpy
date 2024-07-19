@@ -1,4 +1,7 @@
 # Make sure LVGL gets built
+add_compile_options("-Wno-unused-value")
+add_compile_options("-Wno-error")
+
 include(${CMAKE_CURRENT_LIST_DIR}/binding/binding.cmake)
 
 add_library(usermod_lvgl_esp32 INTERFACE)
