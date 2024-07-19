@@ -48,7 +48,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
     ESP_LOGI(TAG,"esp_lcd_new_panel_io_i2c");
     esp_lcd_panel_io_i2c_config_t tp_io_config = ESP_LCD_TOUCH_IO_I2C_CST816S_CONFIG();
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_i2c((esp_lcd_i2c_bus_handle_t)self->ic2_num, &tp_io_config, &self->tp_io_handle));
-    ESP_ERROR_CHECK(esp_lcd_touch_config_t tp_cfg=ESP_PANEL_TOUCH_CONFIG_DEFAULT(self->width,self->height,self->rst,self->inte,self->swap_xy,self->mirror_x,self->mirror_y));
+    esp_lcd_touch_config_t tp_cfg=ESP_PANEL_TOUCH_CONFIG_DEFAULT(self->width,self->height,self->rst,self->inte,self->swap_xy,self->mirror_x,self->mirror_y);
     ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &self->tp));
 
     return mp_obj_new_int_from_uint(0);
