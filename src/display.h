@@ -5,7 +5,7 @@
 #include "esp_lcd_st77916.h"
 #include "esp_lcd_types.h"
 #include "py/obj.h"
-
+#include "driver/ledc.h"
 typedef void (*lvgl_esp32_transfer_done_cb_t)(void *);
 
 typedef struct lvgl_esp32_Display_obj_t
