@@ -7,10 +7,12 @@ include(${CMAKE_CURRENT_LIST_DIR}/binding/binding.cmake)
 add_library(usermod_lvgl_esp32 INTERFACE)
 
 target_sources(usermod_lvgl_esp32 INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}/src/esp_lcd_touch_cst816s.c
         ${CMAKE_CURRENT_LIST_DIR}/src/esp_lcd_st77916.c
         ${CMAKE_CURRENT_LIST_DIR}/src/qspi.c
         ${CMAKE_CURRENT_LIST_DIR}/src/spi.c
         ${CMAKE_CURRENT_LIST_DIR}/src/display.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/touch.c
         ${CMAKE_CURRENT_LIST_DIR}/src/wrapper.c
         ${CMAKE_CURRENT_LIST_DIR}/src/module.c
 )
