@@ -67,7 +67,10 @@ static void transfer_done_cb(void *user_data)
 }
 static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *user_data){
 
-    lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
+    lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *) user_data;
+    if(touchObj){
+
+    }
 
 }
 static uint32_t tick_get_cb()
@@ -111,7 +114,7 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
 
     self->lv_indev=lv_indev_create();
     lv_indev_set_type(self->lv_indev, LV_INDEV_TYPE_POINTER);
-    lv_indev_set_user_data(self->lv_indev,(void *) self);
+    lv_indev_set_user_data(self->lv_indev,(void *) self->touch);
     lv_indev_set_read_cb(self->lv_indev, touch_read_cb);
 
     ESP_LOGI(TAG, "Initializing LVGL Tick callback function");

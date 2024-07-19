@@ -27,8 +27,6 @@ static mp_obj_t lvgl_esp32_Touch_deinit(mp_obj_t self_ptr)
 {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-
-
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Touch_deinit_obj, lvgl_esp32_Touch_deinit);
