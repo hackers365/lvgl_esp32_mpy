@@ -12,12 +12,11 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_lcd_touch_cst816s.h"
-#include "esp_lcd_touch_cst816s.c"
 static const char *TAG = "lvgl_esp32_touch";
 
 
 // get_finger_position 方法
-static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_in) {
+static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     uint16_t touch_x[1];
     uint16_t touch_y[1];
@@ -46,6 +45,8 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
             .master.clk_speed = 400000,
     };
     ESP_LOGI(TAG,"esp_lcd_new_panel_io_i2c");
+    ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &i2c_conf));
+    ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, i2c_conf.mode, 0, 0, 0));
     esp_lcd_panel_io_i2c_config_t tp_io_config = ESP_LCD_TOUCH_IO_I2C_CST816S_CONFIG();
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_i2c((esp_lcd_i2c_bus_handle_t)self->ic2_num, &tp_io_config, &self->tp_io_handle));
     esp_lcd_touch_config_t tp_cfg=ESP_PANEL_TOUCH_CONFIG_DEFAULT(self->width,self->height,self->rst,self->inte,self->swap_xy,self->mirror_x,self->mirror_y);
