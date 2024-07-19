@@ -9,6 +9,7 @@ wrapper = lvgl_esp32.Wrapper(display)
 wrapper.init()
 display.brightness(100)
 #顺时转180度
+display.swapXY(False)
 display.mirrorX(True)
 display.mirrorY(True)
 screen = lv.screen_active()
