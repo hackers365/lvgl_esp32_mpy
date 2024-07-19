@@ -70,7 +70,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
         .user_data = NULL,
         .driver_data = NULL,
     };
-    ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &self->tp));
+    ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &(self->tp)));
     ESP_LOGI(TAG,"Initializing display touch Finish");
     return mp_obj_new_int_from_uint(0);
 }
