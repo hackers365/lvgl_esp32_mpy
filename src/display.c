@@ -248,9 +248,9 @@ static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0xF3,(uint8_t []){0x01}, 1, 0},
         {0xF0,(uint8_t []){0x00}, 1, 0},
         {0x21,NULL, 0, 0},
-        {0x11,NULL, 0, 120},
-        {0x29,NULL, 0, 1},
-};;
+        {0x11,NULL, 0, 0},
+        {0x29,NULL, 0, 120},
+};
 static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
