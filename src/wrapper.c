@@ -64,11 +64,24 @@ static void transfer_done_cb(void *user_data)
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
     lv_disp_flush_ready(self->lv_display);
 }
-static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *user_data){
+static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
 
-    lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *) user_data;
+    lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *) indev->user_data;
     if(touchObj){
-
+        uint16_t touch_x[1];
+        uint16_t touch_y[1];
+        uint16_t touch_strength[1];
+        uint8_t touch_cnt = 0;
+        esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS)
+        if(touch_cnt>0){
+            data->point.x = point.x;
+            data->point.y = point.y;
+            data->state = LV_INDEV_STATE_PRESSED;
+        }
+        else
+        {
+            data->state = LV_INDEV_STATE_RELEASED;
+        }
     }
 
 }
