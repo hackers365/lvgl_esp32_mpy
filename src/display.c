@@ -327,7 +327,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(self->panel, true));
 
     // 配置LEDC（LED控制器）用于PWM
-     self->ledc_channel = {
+     ledc_channel_config_t channel_config={
             .channel    = LEDC_CHANNEL_0,
             .duty       = 0,
             .gpio_num   = self->blk,
@@ -336,15 +336,15 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
             .timer_sel  = LEDC_TIMER_0,
             .intr_type = LEDC_INTR_DISABLE
     };
-
-    self->ledc_timer = {
+    self->ledc_channel =channel_config;
+    ledc_timer_config_t timer_config={
             .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
             .freq_hz         = 5000,              // PWM频率
             .speed_mode      = LEDC_LOW_SPEED_MODE,
             .timer_num       = LEDC_TIMER_0,
             .clk_cfg = LEDC_AUTO_CLK
     };
-
+    self->ledc_timer =timer_config;
     ledc_timer_config(&self->ledc_timer);
     ledc_channel_config(&self->ledc_channel);
 
