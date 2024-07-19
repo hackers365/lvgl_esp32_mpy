@@ -23,32 +23,30 @@ static const char *TAG = "lvgl_esp32_display";
 #define LCD_PARAM_BITS         8
 
 static void backlight_init(lvgl_esp32_Display_obj_t *self) {
-    // 配置背光引脚为输出模式
-    gpio_pad_select_gpio(BL_GPIO);
-    gpio_set_direction(BL_GPIO, GPIO_MODE_OUTPUT);
-
     // 配置LEDC（LED控制器）用于PWM
     ledc_channel_config_t ledc_channel = {
             .channel    = LEDC_CHANNEL_0,
             .duty       = 0,
             .gpio_num   = self->blk,
-            .speed_mode = LEDC_HIGH_SPEED_MODE,
+            .speed_mode = LEDC_LOW_SPEED_MODE,
             .hpoint     = 0,
-            .timer_sel  = LEDC_TIMER_0
+            .timer_sel  = LEDC_TIMER_0,
+            .intr_type = LEDC_INTR_DISABLE
     };
 
     ledc_timer_config_t ledc_timer = {
             .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
             .freq_hz         = 5000,              // PWM频率
-            .speed_mode      = LEDC_HIGH_SPEED_MODE,
+            .speed_mode      = LEDC_LOW_SPEED_MODE,
             .timer_num       = LEDC_TIMER_0
+            .clk_cfg = LEDC_AUTO_CLK
     };
 
     ledc_timer_config(&ledc_timer);
     ledc_channel_config(&ledc_channel);
 
     // 设置初始背光亮度
-    brightness(self,100)
+    brightness(self,100);
 }
 
 static bool on_color_trans_done_cb(
