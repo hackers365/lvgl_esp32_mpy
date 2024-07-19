@@ -105,14 +105,14 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
 {
     enum
     {
+        ARG_scl,          // width of the Touch
+        ARG_sda,         // height of the Touch
+        ARG_rst,            // configured SPI instance
         ARG_width,          // width of the display
         ARG_height,         // height of the display
         ARG_swap_xy,        // swap X and Y axis
         ARG_mirror_x,       // mirror on X axis
         ARG_mirror_y,       // mirror on Y axis
-        ARG_scl,          // width of the Touch
-        ARG_sda,         // height of the Touch
-        ARG_rst,            // configured SPI instance
         ARG_inter,          // RESET pin number
         ARG_i2c_num,
 
