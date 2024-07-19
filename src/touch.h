@@ -9,26 +9,6 @@
 #include "esp_lcd_types.h"
 #include "esp_lcd_touch.h"
 #include "esp_lcd_touch_cst816s.h"
-#define ESP_PANEL_TOUCH_CONFIG_DEFAULT(width, height, rst_io, int_io,swap_xy,mirror_x,mirror_y) \
-    {                                           \
-        .x_max = width,                         \
-        .y_max = height,                        \
-        .rst_gpio_num = (gpio_num_t)rst_io,     \
-        .int_gpio_num = (gpio_num_t)int_io,     \
-        .levels = {                             \
-            .reset = 0,                         \
-            .interrupt = 0,                     \
-        },                                      \
-        .flags = {                              \
-            .swap_xy = swap_xy,                       \
-            .mirror_x = mirror_x,                      \
-            .mirror_y = mirror_y,                      \
-        },                                      \
-        .process_coordinates = NULL,            \
-        .interrupt_callback = NULL,             \
-        .user_data = NULL,                      \
-        .driver_data = NULL,                    \
-    }
 typedef struct lvgl_esp32_Touch_obj_t
 {
     mp_obj_base_t base;
