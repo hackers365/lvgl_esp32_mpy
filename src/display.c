@@ -239,6 +239,37 @@ static void  brightness(lvgl_esp32_Display_obj_t *self,int percent){
     ESP_ERROR_CHECK(ledc_set_duty(mode, channel, duty_cycle));
     ESP_ERROR_CHECK(ledc_update_duty(mode, channel));
 }
+
+static mp_obj_t lvgl_esp32_Display_mirrorX(mp_obj_t self_ptr,mp_obj_t en)
+{
+    lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->io_handle, mp_obj_is_true(en), self.mirror_x), false, "Mirror X failed");
+    self.mirror_x = mp_obj_is_true(en);
+
+    return true;
+}
+
+static mp_obj_t lvgl_esp32_Display_mirrorY(mp_obj_t self_ptr,mp_obj_t percent en)
+{
+    lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->io_handle, self.mirror_y, mp_obj_is_true(en)), false, "Mirror X failed");
+    self.mirror_y = mp_obj_is_true(en);
+
+    return true;
+}
+
+static mp_obj_t lvgl_esp32_Display_swapXY(mp_obj_t self_ptr,mp_obj_t  en)
+{
+    lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_swap_xy(self->io_handle, mp_obj_is_true(en)), false, "Swap XY failed");
+    self.swap_xy = mp_obj_is_true(en);
+
+    return true;
+}
+
 static mp_obj_t lvgl_esp32_Display_brightness(mp_obj_t self_ptr,mp_obj_t percent){
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     int val=mp_obj_get_int(percent);
@@ -246,6 +277,9 @@ static mp_obj_t lvgl_esp32_Display_brightness(mp_obj_t self_ptr,mp_obj_t percent
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Display_swapXY_obj, lvgl_esp32_Display_swapXY);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Display_mirrorX_obj, lvgl_esp32_Display_mirrorX);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Display_mirrorY_obj, lvgl_esp32_Display_mirrorY);
 
 static void clear(lvgl_esp32_Display_obj_t *self)
 {
