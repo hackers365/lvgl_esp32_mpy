@@ -32,6 +32,8 @@ typedef struct lvgl_esp32_Display_obj_t
 
     esp_lcd_panel_handle_t panel;
     esp_lcd_panel_io_handle_t io_handle;
+    ledc_channel_config_t ledc_channel;
+    ledc_timer_config_t ledc_timer;
 } lvgl_esp32_Display_obj_t;
 
 extern const mp_obj_type_t lvgl_esp32_Display_type;

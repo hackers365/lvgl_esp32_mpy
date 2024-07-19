@@ -21,94 +21,6 @@ static const char *TAG = "lvgl_esp32_display";
 // Bit number used to represent command and parameter
 #define LCD_CMD_BITS           32
 #define LCD_PARAM_BITS         8
-
-static void backlight_init(lvgl_esp32_Display_obj_t *self) {
-    // 配置LEDC（LED控制器）用于PWM
-    ledc_channel_config_t ledc_channel = {
-            .channel    = LEDC_CHANNEL_0,
-            .duty       = 0,
-            .gpio_num   = self->blk,
-            .speed_mode = LEDC_LOW_SPEED_MODE,
-            .hpoint     = 0,
-            .timer_sel  = LEDC_TIMER_0,
-            .intr_type = LEDC_INTR_DISABLE
-    };
-
-    ledc_timer_config_t ledc_timer = {
-            .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
-            .freq_hz         = 5000,              // PWM频率
-            .speed_mode      = LEDC_LOW_SPEED_MODE,
-            .timer_num       = LEDC_TIMER_0
-            .clk_cfg = LEDC_AUTO_CLK
-    };
-
-    ledc_timer_config(&ledc_timer);
-    ledc_channel_config(&ledc_channel);
-
-    // 设置初始背光亮度
-    brightness(self,100);
-}
-
-static bool on_color_trans_done_cb(
-    esp_lcd_panel_io_handle_t panel_io,
-    esp_lcd_panel_io_event_data_t *edata,
-    void *user_ctx
-)
-{
-    lvgl_esp32_Display_obj_t *self = (lvgl_esp32_Display_obj_t *) user_ctx;
-
-    if (self->transfer_done_cb != NULL)
-    {
-        self->transfer_done_cb(self->transfer_done_user_data);
-    }
-
-    return false;
-}
-
-void lvgl_esp32_Display_draw_bitmap(
-    lvgl_esp32_Display_obj_t *self,
-    int x_start,
-    int y_start,
-    int x_end,
-    int y_end,
-    const void *data
-)
-{
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
-}
-void brightness(lvgl_esp32_Display_obj_t *self,int brightness){
-    if (brightness < 0) {
-        brightness = 0;
-    } else if (brightness > 100) {
-        brightness = 100;
-    }
-    // 计算占空比
-    uint32_t duty = (8191 * brightness) / 100; // 13位分辨率的最大值是8191
-    // 设置占空比
-    ESP_ERROR_CHECK(ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, duty));
-    ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
-}
-static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
-
-static void clear(lvgl_esp32_Display_obj_t *self)
-{
-    ESP_LOGI(TAG, "Clearing screen");
-
-    // Create a temporary empty buffer of only one line of pixels so this will also work on memory-constrained devices
-    size_t buf_size = self->width;
-    uint8_t *buf = heap_caps_calloc(1, buf_size * 18, MALLOC_CAP_DMA);
-
-    assert(buf);
-
-    // Blit lines to the screen
-    for (int line = 0; line < self->height; line++)
-    {
-        lvgl_esp32_Display_draw_bitmap(self, 0, line, self->width, line + 1, buf);
-    }
-
-    // Release the buffer
-    heap_caps_free(buf);
-}
 static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0xF0, (uint8_t[]){0x28}, 1, 0},
         {0xF2, (uint8_t[]){0x28}, 1, 0},
@@ -291,6 +203,64 @@ static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0x21, (uint8_t[]){0x00}, 1, 0},
         {0x11, (uint8_t[]){0x00}, 1, 120},
         {0x29, (uint8_t[]){0x00}, 1, 0}};
+
+static bool on_color_trans_done_cb(
+    esp_lcd_panel_io_handle_t panel_io,
+    esp_lcd_panel_io_event_data_t *edata,
+    void *user_ctx
+)
+{
+    lvgl_esp32_Display_obj_t *self = (lvgl_esp32_Display_obj_t *) user_ctx;
+
+    if (self->transfer_done_cb != NULL)
+    {
+        self->transfer_done_cb(self->transfer_done_user_data);
+    }
+
+    return false;
+}
+
+void lvgl_esp32_Display_draw_bitmap(
+    lvgl_esp32_Display_obj_t *self,
+    int x_start,
+    int y_start,
+    int x_end,
+    int y_end,
+    const void *data
+)
+{
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
+}
+void brightness(lvgl_esp32_Display_obj_t *self,int brightness){
+    uint32_t duty_cycle = (BIT(self->ledc_timer.duty_resolution) * percent) / 100;
+    ledc_channel_t channel = self->ledc_channel.channel;
+    ledc_mode_t mode = self->ledc_channel.speed_mode;
+    // 设置占空比
+    ESP_ERROR_CHECK(ledc_set_duty(mode, channel, duty_cycle));
+    ESP_ERROR_CHECK(ledc_update_duty(mode, channel));
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
+
+static void clear(lvgl_esp32_Display_obj_t *self)
+{
+    ESP_LOGI(TAG, "Clearing screen");
+
+    // Create a temporary empty buffer of only one line of pixels so this will also work on memory-constrained devices
+    size_t buf_size = self->width;
+    uint8_t *buf = heap_caps_calloc(1, buf_size * 18, MALLOC_CAP_DMA);
+
+    assert(buf);
+
+    // Blit lines to the screen
+    for (int line = 0; line < self->height; line++)
+    {
+        lvgl_esp32_Display_draw_bitmap(self, 0, line, self->width, line + 1, buf);
+    }
+
+    // Release the buffer
+    heap_caps_free(buf);
+}
+
 static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
@@ -350,7 +320,30 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(self->panel, true));
 
-    backlight_init(self);
+    // 配置LEDC（LED控制器）用于PWM
+     self.ledc_channel = {
+            .channel    = LEDC_CHANNEL_0,
+            .duty       = 0,
+            .gpio_num   = self->blk,
+            .speed_mode = LEDC_LOW_SPEED_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_TIMER_0,
+            .intr_type = LEDC_INTR_DISABLE
+    };
+
+    self.ledc_timer = {
+            .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
+            .freq_hz         = 5000,              // PWM频率
+            .speed_mode      = LEDC_LOW_SPEED_MODE,
+            .timer_num       = LEDC_TIMER_0,
+             .clk_cfg = LEDC_AUTO_CLK
+    };
+
+    ledc_timer_config(&ledc_timer);
+    ledc_channel_config(&ledc_channel);
+
+    // 设置初始背光亮度
+    brightness(self,100);
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_init_obj, lvgl_esp32_Display_init);
