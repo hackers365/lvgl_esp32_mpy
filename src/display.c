@@ -70,16 +70,6 @@ static void clear(lvgl_esp32_Display_obj_t *self)
 }
 static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0xF0, (uint8_t []){0x08}, 1, 0},
-        {0xF2, (uint8_t []){0x08}, 1, 0},
-        {0x9B, (uint8_t []){0x51}, 1, 0},
-        {0x86, (uint8_t []){0x53}, 1, 0},
-        {0xF2, (uint8_t []){0x80}, 1, 0},
-        {0xF0, (uint8_t []){0x00}, 1, 0},
-        {0xF0, (uint8_t []){0x01}, 1, 0},
-        {0xF1, (uint8_t []){0x01}, 1, 0},
-        {0xB0, (uint8_t []){0x54}, 1, 0},
-        {0xB1, (uint8_t []){0x3F}, 1, 0},
-        {0xB2, (uint8_t []){0x2A}, 1, 0},
         {0xB4, (uint8_t[]){0x46}, 1, 0},
         {0xB5, (uint8_t[]){0x34}, 1, 0},
         {0xB6, (uint8_t[]){0xD5}, 1, 0},
@@ -103,7 +93,7 @@ static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0xCB, (uint8_t[]){0x51}, 1, 0},
         {0xD0, (uint8_t[]){0x91}, 1, 0},
         {0xD1, (uint8_t[]){0x68}, 1, 0},
-        {0xD2, (uint8_t[]){0x68}, 1, 0},
+        {0xD2, (uint8_t[]){0x69}, 1, 0},
         {0xF5, (uint8_t[]){0x00, 0xA5}, 2, 0},
         {0xDD, (uint8_t []){0x35}, 1, 0},
         {0xDE, (uint8_t []){0x35}, 1, 0},
@@ -286,7 +276,7 @@ static const st77916_lcd_init_cmd_t lcd_init_cmds[] = {
         {0x21, (uint8_t[]){0x00}, 1, 0},
         {0x11, (uint8_t[]){0x00}, 1, 120},
 };
-static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
+        static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
