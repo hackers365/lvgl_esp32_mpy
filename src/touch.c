@@ -149,6 +149,8 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     self->ic2_num=args[ARG_i2c_num].u_int;
     self->tp=NULL;
     self->tp_io_handle=NULL;
+    ESP_LOGI(TAG, "New Touch Class scl:%d,sda:%d",self->scl,self->sda);
+
     return MP_OBJ_FROM_PTR(self);
 }
 
