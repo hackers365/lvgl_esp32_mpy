@@ -245,7 +245,7 @@ static mp_obj_t lvgl_esp32_Display_brightness(mp_obj_t self_ptr,mp_obj_t percent
     brightness(self,val);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
 
 static void clear(lvgl_esp32_Display_obj_t *self)
 {
