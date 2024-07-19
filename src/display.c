@@ -244,7 +244,7 @@ static mp_obj_t lvgl_esp32_Display_mirrorX(mp_obj_t self_ptr,mp_obj_t en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->io_handle, mp_obj_is_true(en), self->mirror_x), false, "Mirror X failed");
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->panel, mp_obj_is_true(en), self->mirror_x), false, "Mirror X failed");
     self->mirror_x = mp_obj_is_true(en);
 
     return mp_const_none;
@@ -254,7 +254,7 @@ static mp_obj_t lvgl_esp32_Display_mirrorY(mp_obj_t self_ptr,mp_obj_t  en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->io_handle, self->mirror_y, mp_obj_is_true(en)), false, "Mirror X failed");
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_mirror(self->panel, self->mirror_y, mp_obj_is_true(en)), false, "Mirror X failed");
     self->mirror_y = mp_obj_is_true(en);
 
     return mp_const_none;
@@ -264,7 +264,7 @@ static mp_obj_t lvgl_esp32_Display_swapXY(mp_obj_t self_ptr,mp_obj_t  en)
 {
     lvgl_esp32_Display_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_swap_xy(self->io_handle, mp_obj_is_true(en)), false, "Swap XY failed");
+    ESP_PANEL_CHECK_ERR_RET(esp_lcd_panel_swap_xy(self->panel, mp_obj_is_true(en)), false, "Swap XY failed");
     self->swap_xy = mp_obj_is_true(en);
 
     return mp_const_none;
