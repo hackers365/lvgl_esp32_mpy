@@ -8,6 +8,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
+#include "driver/i2c.h"
 #include "esp_timer.h"
 #include "esp_err.h"
 #include "esp_log.h"
@@ -22,14 +23,15 @@ static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     uint16_t touch_y[1];
     uint16_t touch_strength[1];
     uint8_t touch_cnt = 0;
-    bool touchpad_pressed = esp_lcd_touch_get_coordinates(tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS);
+    ESP_ERROR_CHECK(esp_lcd_touch_get_coordinates(self->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS));
     mp_obj_t tuple[3];
     tuple[0] = mp_obj_new_int(touch_cnt);
     tuple[1] = mp_obj_new_int(touch_x[0]);
     tuple[2] = mp_obj_new_int(touch_y[0]);
     return mp_obj_new_tuple(3, tuple);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Touch_read_data_obj, lvgl_esp32_Touch_read_data);
+
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Touch_read_data_obj, lvgl_esp32_Touch_read_data);
 
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
 {
