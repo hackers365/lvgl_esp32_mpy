@@ -11,6 +11,7 @@
 #include "esp_lcd_panel_vendor.h"
 #include "esp_lcd_panel_ops.h"
 #include "driver/gpio.h"
+#include "driver/ledc.h"
 #include "driver/spi_master.h"
 #include "esp_err.h"
 #include "esp_log.h"
@@ -20,6 +21,35 @@ static const char *TAG = "lvgl_esp32_display";
 // Bit number used to represent command and parameter
 #define LCD_CMD_BITS           32
 #define LCD_PARAM_BITS         8
+
+static void backlight_init(lvgl_esp32_Display_obj_t *self) {
+    // 配置背光引脚为输出模式
+    gpio_pad_select_gpio(BL_GPIO);
+    gpio_set_direction(BL_GPIO, GPIO_MODE_OUTPUT);
+
+    // 配置LEDC（LED控制器）用于PWM
+    ledc_channel_config_t ledc_channel = {
+            .channel    = LEDC_CHANNEL_0,
+            .duty       = 0,
+            .gpio_num   = self->blk,
+            .speed_mode = LEDC_HIGH_SPEED_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_TIMER_0
+    };
+
+    ledc_timer_config_t ledc_timer = {
+            .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
+            .freq_hz         = 5000,              // PWM频率
+            .speed_mode      = LEDC_HIGH_SPEED_MODE,
+            .timer_num       = LEDC_TIMER_0
+    };
+
+    ledc_timer_config(&ledc_timer);
+    ledc_channel_config(&ledc_channel);
+
+    // 设置初始背光亮度
+    brightness(self,100)
+}
 
 static bool on_color_trans_done_cb(
     esp_lcd_panel_io_handle_t panel_io,
@@ -48,6 +78,19 @@ void lvgl_esp32_Display_draw_bitmap(
 {
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(self->panel, x_start, y_start, x_end, y_end, data));
 }
+void brightness(lvgl_esp32_Display_obj_t *self,int brightness){
+    if (brightness < 0) {
+        brightness = 0;
+    } else if (brightness > 100) {
+        brightness = 100;
+    }
+    // 计算占空比
+    uint32_t duty = (8191 * brightness) / 100; // 13位分辨率的最大值是8191
+    // 设置占空比
+    ESP_ERROR_CHECK(ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, duty));
+    ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_brightness_obj, lvgl_esp32_Display_brightness);
 
 static void clear(lvgl_esp32_Display_obj_t *self)
 {
@@ -309,6 +352,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
 
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(self->panel, true));
 
+    backlight_init(self);
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Display_init_obj, lvgl_esp32_Display_init);
@@ -356,6 +400,7 @@ static mp_obj_t lvgl_esp32_Display_make_new(
         ARG_spi,            // configured SPI instance
         ARG_reset,          // RESET pin number
         ARG_cs,             // CS pin number
+        ARG_blk,             // BLK pin number
         ARG_pixel_clock,    // Pixel clock in Hz
         ARG_swap_xy,        // swap X and Y axis
         ARG_mirror_x,       // mirror on X axis
@@ -370,6 +415,7 @@ static mp_obj_t lvgl_esp32_Display_make_new(
         { MP_QSTR_spi, MP_ARG_OBJ | MP_ARG_REQUIRED },
         { MP_QSTR_reset, MP_ARG_INT | MP_ARG_REQUIRED },
         { MP_QSTR_cs, MP_ARG_INT | MP_ARG_REQUIRED },
+        { MP_QSTR_blk, MP_ARG_INT | MP_ARG_REQUIRED },
         { MP_QSTR_pixel_clock, MP_ARG_INT | MP_ARG_KW_ONLY, { .u_int = 20 * 1000 * 1000 }},
         { MP_QSTR_swap_xy, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
         { MP_QSTR_mirror_x, MP_ARG_BOOL | MP_ARG_KW_ONLY, { .u_bool = false }},
@@ -389,6 +435,7 @@ static mp_obj_t lvgl_esp32_Display_make_new(
     self->spi = (lvgl_esp32_QSPI_obj_t *) MP_OBJ_TO_PTR(args[ARG_spi].u_obj);
     self->reset = args[ARG_reset].u_int;
     self->cs = args[ARG_cs].u_int;
+    self->blk = args[ARG_blk].u_int;
     self->pixel_clock = args[ARG_pixel_clock].u_int;
 
     self->swap_xy = args[ARG_swap_xy].u_bool;
@@ -410,6 +457,7 @@ static const mp_rom_map_elem_t lvgl_esp32_Display_locals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&lvgl_esp32_Display_init_obj) },
     { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_Display_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_Display_deinit_obj) },
+    {MP_ROM_QSTR(MP_QSTR_brightness),MP_ROM_PTR(&lvgl_esp32_Display_brightness_obj)}
 };
 
 static MP_DEFINE_CONST_DICT(lvgl_esp32_Display_locals, lvgl_esp32_Display_locals_table);

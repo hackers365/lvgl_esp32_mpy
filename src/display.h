@@ -18,6 +18,7 @@ typedef struct lvgl_esp32_Display_obj_t
     lvgl_esp32_QSPI_obj_t *spi;
     uint8_t reset;
     uint8_t cs;
+    uint8_t blk;
     uint32_t pixel_clock;
 
     bool swap_xy;
@@ -43,5 +44,8 @@ void lvgl_esp32_Display_draw_bitmap(
     int y_end,
     const void *data
 );
+void brightness(
+        lvgl_esp32_Display_obj_t *self,
+        int brightness);
 
 #endif /* __LVGL_ESP32_DISPLAY_H__ */
