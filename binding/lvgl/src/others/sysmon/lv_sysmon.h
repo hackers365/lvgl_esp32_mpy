@@ -82,8 +82,10 @@ typedef struct {
  * Create a system monitor object.
  * @param parent pointer to an object, it will be the parent of the new system monitor
  * @return       pointer to the new system monitor object
- */
+ *//*
+
 lv_obj_t * lv_sysmon_create(lv_obj_t * parent);
+*/
 
 /**
  * Set the refresh period of the system monitor object
