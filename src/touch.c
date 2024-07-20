@@ -40,12 +40,43 @@ static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Touch_read_data_obj, lvgl_esp32_Touch_read_data);
+static mp_obj_t lvgl_esp32_Touch_mirrorX(mp_obj_t self_ptr,mp_obj_t en)
+{
+    lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
+    ESP_ERROR_CHECK(esp_lcd_touch_set_mirror_x(self->tp, mp_obj_is_true(en)));
+    self->mirror_x = mp_obj_is_true(en);
+
+    return mp_const_none;
+}
+
+static mp_obj_t lvgl_esp32_Touch_mirrorY(mp_obj_t self_ptr,mp_obj_t  en)
+{
+    lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    ESP_ERROR_CHECK(esp_lcd_touch_set_mirror_y(self->tp, mp_obj_is_true(en)));
+    self->mirror_y = mp_obj_is_true(en);
+
+    return mp_const_none;
+}
+
+static mp_obj_t lvgl_esp32_Touch_swapXY(mp_obj_t self_ptr,mp_obj_t  en)
+{
+    lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    ESP_ERROR_CHECK(esp_lcd_touch_set_swap_xy(self->tp, mp_obj_is_true(en)));
+    self->swap_xy = mp_obj_is_true(en);
+
+    return mp_const_none;
+}
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_swapXY_obj, lvgl_esp32_Touch_swapXY);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorX_obj, lvgl_esp32_Touch_mirrorX);
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorY_obj, lvgl_esp32_Touch_mirrorY);
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
 
-    ESP_LOGI(TAG,"Initializing I2C for display touch sda:%d,scl:%d",self->sda,self->scl);
+    ESP_LOGI(TAG,"Initializing I2C for Touch touch sda:%d,scl:%d",self->sda,self->scl);
     const i2c_config_t i2c_conf = {
             .mode = I2C_MODE_MASTER,
             .sda_io_num = self->sda,
@@ -56,7 +87,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
     };
     ESP_ERROR_CHECK(i2c_param_config(self->ic2_num, &i2c_conf));
     ESP_ERROR_CHECK(i2c_driver_install(self->ic2_num, i2c_conf.mode, 0, 0, 0));
-    ESP_LOGI(TAG,"Initializing IO for display touch");
+    ESP_LOGI(TAG,"Initializing IO for Touch touch");
     esp_lcd_panel_io_i2c_config_t tp_io_config = ESP_LCD_TOUCH_IO_I2C_CST816S_CONFIG();
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_i2c((esp_lcd_i2c_bus_handle_t)self->ic2_num, &tp_io_config, &self->tp_io_handle));
     esp_lcd_touch_config_t tp_cfg= {
@@ -79,7 +110,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
         .driver_data = NULL,
     };
     ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &(self->tp)));
-    ESP_LOGI(TAG,"Initializing display touch Finish");
+    ESP_LOGI(TAG,"Initializing Touch touch Finish");
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_Touch_init_obj, lvgl_esp32_Touch_init);
@@ -117,8 +148,8 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
         ARG_sda,         // height of the Touch
         ARG_rst,            // configured SPI instance
         ARG_inter,          // RESET pin number
-        ARG_width,          // width of the display
-        ARG_height,         // height of the display
+        ARG_width,          // width of the Touch
+        ARG_height,         // height of the Touch
         ARG_swap_xy,        // swap X and Y axis
         ARG_mirror_x,       // mirror on X axis
         ARG_mirror_y,       // mirror on Y axis
@@ -158,7 +189,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     self->tp=NULL;
     self->tp_io_handle=NULL;
     ESP_LOGI(TAG, "New Touch Class scl:%d,sda:%d",self->scl,self->sda);
-    touch_mux = xSemaphoreCreateBinary();
+    self->touch_mux = xSemaphoreCreateBinary();
     return MP_OBJ_FROM_PTR(self);
 }
 
@@ -167,6 +198,9 @@ static const mp_rom_map_elem_t lvgl_esp32_Touch_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_Touch_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_Touch_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_read_data), MP_ROM_PTR(&lvgl_esp32_Touch_read_data_obj) },
+        {MP_ROM_QSTR(MP_QSTR_swapXY),MP_ROM_PTR(&lvgl_esp32_Touch_swapXY_obj)},
+        {MP_ROM_QSTR(MP_QSTR_mirrorX),MP_ROM_PTR(&lvgl_esp32_Touch_mirrorX_obj)},
+        {MP_ROM_QSTR(MP_QSTR_mirrorY),MP_ROM_PTR(&lvgl_esp32_Touch_mirrorY_obj)}
 };
 
 static MP_DEFINE_CONST_DICT(lvgl_esp32_Touch_locals, lvgl_esp32_Touch_locals_table);

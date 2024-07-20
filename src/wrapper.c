@@ -66,7 +66,7 @@ static void transfer_done_cb(void *user_data)
 }
 static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
     lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *)lv_indev_get_user_data(indev);
-    if(touchObj&&xSemaphoreTake(touch_mux, 0) == pdTRUE){
+    if(touchObj&&xSemaphoreTake(touchObj->touch_mux, 0) == pdTRUE){
         esp_lcd_touch_read_data(tp); // read only when ISR was triggled
 
         uint16_t touch_x[1];
