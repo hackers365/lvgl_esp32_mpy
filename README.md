@@ -36,3 +36,7 @@ git clone --recurse-submodules https://github.com/apexracing/lvgl_esp32_mpy.git
 make BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM_OCT USER_C_MODULES=<DIR>/lvgl_esp32_mpy/micropython.cmake
 
 ```
+
+## 固件下载
+>- 目录[dist](./dist)下已经存放编译好的固件,18位，限制30FPS，用[flash_download_tool_3.9.5](https://www.espressif.com/sites/default/files/tools/flash_download_tool_3.9.5.zip)烧录固件
+>- 使用Thonny上传[example](./examples)文件运行示例代码。
