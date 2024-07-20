@@ -65,15 +65,16 @@ static void transfer_done_cb(void *user_data)
     lv_disp_flush_ready(self->lv_display);
 }
 static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
-
     lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *)lv_indev_get_user_data(indev);
-    if(touchObj){
+    if(touchObj&&xSemaphoreTake(touch_mux, 0) == pdTRUE){
+        esp_lcd_touch_read_data(tp); // read only when ISR was triggled
+
         uint16_t touch_x[1];
         uint16_t touch_y[1];
         uint16_t touch_strength[1];
         uint8_t touch_cnt = 0;
-        esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS);
-        if(touch_cnt>0){
+        bool touched=esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS);
+        if(touch_cnt>0&&touched){
             ESP_LOGI(TAG,"Touching num=%d,x=%d,y=%d",touch_cnt,touch_x[0],touch_y[0]);
             data->point.x = touch_x[0];
             data->point.y = touch_y[0];
