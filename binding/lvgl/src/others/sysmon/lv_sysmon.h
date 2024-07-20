@@ -92,7 +92,9 @@ lv_obj_t * lv_sysmon_create(lv_obj_t * parent);
  * @param obj    pointer to a system monitor object
  * @param period the refresh period in milliseconds
  */
+/*
 void lv_sysmon_set_refr_period(lv_obj_t * obj, uint32_t period);
+*/
 
 /**
  * Initialize built-in system monitor, such as performance and memory monitor.
