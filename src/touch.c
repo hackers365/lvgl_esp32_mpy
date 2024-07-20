@@ -23,7 +23,9 @@ static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     uint16_t touch_y[1];
     uint16_t touch_strength[1];
     uint8_t touch_cnt = 0;
-    esp_lcd_touch_read_data(self->tp)
+    if(xSemaphoreTake(touch_mux, 0) == pdTRUE){
+        esp_lcd_touch_read_data(self->tp);
+    }
     ESP_ERROR_CHECK(esp_lcd_touch_get_coordinates(self->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS));
     mp_obj_t tuple[3];
     tuple[0] = mp_obj_new_int(touch_cnt);
