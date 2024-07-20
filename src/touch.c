@@ -68,6 +68,7 @@ static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorY_obj, lvgl_esp32_Touch_
 
 static void touch_callback(esp_lcd_touch_handle_t tp)
 {
+    ESP_LOGI(TAG,"touch_callback...");
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
 
