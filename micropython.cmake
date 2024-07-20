@@ -21,6 +21,7 @@ message("IDF路径:${IDF_PATH}")
 message("compoonents路径:${USER_COMPONENT_DIR}")
 target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/include/
+        ${IDF_PATH}/components/esp_lcd/include/
         ${IDF_PATH}/components/esp_lcd/interface/
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
