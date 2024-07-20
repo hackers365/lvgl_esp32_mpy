@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 /* Maximum point number */
-#define CONFIG_ESP_LCD_TOUCH_MAX_POINTS          (5)
+#define CONFIG_ESP_LCD_TOUCH_MAX_POINTS          (1)
 /* Maximum button number */
 #define CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS         (1)
 /**
