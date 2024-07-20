@@ -14,8 +14,17 @@
 #include "esp_log.h"
 #include "esp_lcd_touch_cst816s.h"
 static const char *TAG = "lvgl_esp32_touch";
-static SemaphoreHandle_t touch_mux=NULL;
+static void touch_callback(esp_lcd_touch_handle_t tp)
+{
+    ESP_LOGI(TAG,"touch_callback...");
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
 
+    if (xHigherPriorityTaskWoken)
+    {
+        portYIELD_FROM_ISR();
+    }
+}
 // get_finger_position 方法
 static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
@@ -68,16 +77,7 @@ static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_swapXY_obj, lvgl_esp32_Touch_s
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorX_obj, lvgl_esp32_Touch_mirrorX);
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorY_obj, lvgl_esp32_Touch_mirrorY);
 
-static void touch_callback(esp_lcd_touch_handle_t tp)
-{
-    ESP_LOGI(TAG,"touch_callback...");
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
 
-    if (xHigherPriorityTaskWoken) {
-        portYIELD_FROM_ISR();
-    }
-}
 
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
 {
@@ -196,6 +196,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     self->ic2_num=args[ARG_i2c_num].u_int;
     self->tp=NULL;
     self->tp_io_handle=NULL;
+    touch_mux=NULL;
     ESP_LOGI(TAG, "New Touch Class scl:%d,sda:%d",self->scl,self->sda);
     return MP_OBJ_FROM_PTR(self);
 }
