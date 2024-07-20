@@ -14,7 +14,7 @@
 #include "esp_log.h"
 #include "esp_lcd_touch_cst816s.h"
 static const char *TAG = "lvgl_esp32_touch";
-
+static SemaphoreHandle_t touch_mux=NULL;
 
 // get_finger_position 方法
 static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
@@ -65,6 +65,17 @@ static mp_obj_t lvgl_esp32_Touch_swapXY(mp_obj_t self_ptr,mp_obj_t  en)
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_swapXY_obj, lvgl_esp32_Touch_swapXY);
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorX_obj, lvgl_esp32_Touch_mirrorX);
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_Touch_mirrorY_obj, lvgl_esp32_Touch_mirrorY);
+
+static void touch_callback(esp_lcd_touch_handle_t tp)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
+
+    if (xHigherPriorityTaskWoken) {
+        portYIELD_FROM_ISR();
+    }
+}
+
 static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
@@ -98,11 +109,12 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
             .mirror_y = self->mirror_y,
         },
         .process_coordinates = NULL,
-        .interrupt_callback = NULL,
+        .interrupt_callback = touch_callback,
         .user_data = NULL,
         .driver_data = NULL,
     };
     ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &(self->tp)));
+    touch_mux=xSemaphoreCreateBinary();
     ESP_LOGI(TAG,"Initializing Touch touch Finish");
     return mp_obj_new_int_from_uint(0);
 }
