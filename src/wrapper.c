@@ -107,7 +107,7 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
     self->lv_display = lv_display_create(self->display->width, self->display->height);
 
     ESP_LOGI(TAG, "Creating display buffers");
-    self->buf_size = self->display->width*96;
+    self->buf_size = self->display->width*72;
     self->buf1 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
     assert(self->buf1);
     self->buf2 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
