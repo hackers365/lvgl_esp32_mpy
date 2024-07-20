@@ -14,17 +14,7 @@
 #include "esp_log.h"
 #include "esp_lcd_touch_cst816s.h"
 static const char *TAG = "lvgl_esp32_touch";
-static void touch_callback(esp_lcd_touch_handle_t tp)
-{
-    ESP_LOGI(TAG,"touch_callback...");
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
 
-    if (xHigherPriorityTaskWoken)
-    {
-        portYIELD_FROM_ISR_NO_ARG();
-    }
-}
 // get_finger_position 方法
 static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
@@ -32,9 +22,7 @@ static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     uint16_t touch_y[1];
     uint16_t touch_strength[1];
     uint8_t touch_cnt = 0;
-    if(xSemaphoreTake(touch_mux, 0) == pdTRUE){
-        esp_lcd_touch_read_data(self->tp);
-    }
+    esp_lcd_touch_read_data(self->tp);
     ESP_ERROR_CHECK(esp_lcd_touch_get_coordinates(self->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS));
     mp_obj_t tuple[3];
     tuple[0] = mp_obj_new_int(touch_cnt);
@@ -112,7 +100,7 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
             .mirror_y = self->mirror_y,
         },
         .process_coordinates = NULL,
-        .interrupt_callback = touch_callback,
+        .interrupt_callback = NULL,
         .user_data = NULL,
         .driver_data = NULL,
     };

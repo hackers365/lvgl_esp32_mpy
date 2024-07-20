@@ -9,7 +9,6 @@
 #include "esp_lcd_types.h"
 #include "esp_lcd_touch.h"
 #include "esp_lcd_touch_cst816s.h"
-static SemaphoreHandle_t touch_mux;
 typedef struct lvgl_esp32_Touch_obj_t
 {
     mp_obj_base_t base;
