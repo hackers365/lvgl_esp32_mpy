@@ -9,7 +9,7 @@ spi = lvgl_esp32.QSPI(
     data1=12,
     data2=13,
     data3=14,
-    max_transfer_s=int(360*80*16/8)
+    max_transfer_s=int(360*96)
 )
 spi.init()
 print("SPI INITED")
@@ -28,3 +28,16 @@ display = lvgl_esp32.Display(
     pixel_clock=50_000_000,
 )
 display.init()
+
+touch=lvgl_esp32.Touch(
+    scl=8,
+    sda=7,
+    rst=40,
+    inter=41,
+    width=360,
+    height=360,
+    swap_xy=False,
+    mirror_x=False,
+    mirror_y=False,
+    )
+touch.init()
