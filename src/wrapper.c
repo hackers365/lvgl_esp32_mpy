@@ -4,7 +4,7 @@
 #include "esp_timer.h"
 #include "py/runtime.h"
 static const char *TAG = "lvgl_esp32_wrapper";
-static void lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
+static void IRAM_ATTR lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
     //ESP_LOGI(TAG, "flush_cb: lv_draw_sw_rgb666_swap");
     // RGB666 格式每个像素占 24 位，因此需要将缓冲区大小除以 3 以得到像素数量
     uint32_t u32_cnt = buf_size_px / 3;
@@ -48,7 +48,7 @@ static void lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
         buf8[e + 2] = temp;
     }
 }
-static void flush_cb(lv_display_t *display, const lv_area_t *area, uint8_t *data)
+static void IRAM_ATTR flush_cb(lv_display_t *display, const lv_area_t *area, uint8_t *data)
 {
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) lv_display_get_user_data(display);;
     //ESP_LOGI(TAG, "flush_cb: x1=%ld.y1=%ld.x2=%ld.y2=%ld",area->x1,area->y1,area->x2+1,area->y2+1);
@@ -64,7 +64,7 @@ static void transfer_done_cb(void *user_data)
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) user_data;
     lv_disp_flush_ready(self->lv_display);
 }
-static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
+static void IRAM_ATTR touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
     lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *)lv_indev_get_user_data(indev);
     if(touchObj){
         esp_lcd_touch_read_data(touchObj->tp);
@@ -86,7 +86,7 @@ static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
     }
 
 }
-static uint32_t tick_get_cb()
+static uint32_t IRAM_ATTR tick_get_cb()
 {
     return esp_timer_get_time() / 1000;
 }
