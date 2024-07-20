@@ -67,16 +67,14 @@ static void transfer_done_cb(void *user_data)
 static void touch_read_cb(lv_indev_t *indev, lv_indev_data_t *data){
     lvgl_esp32_Touch_obj_t *touchObj = (lvgl_esp32_Touch_obj_t *)lv_indev_get_user_data(indev);
     if(touchObj){
-        ESP_ERROR_CHECK_WITHOUT_ABORT(esp_lcd_touch_read_data(touchObj->tp));
+        esp_lcd_touch_read_data(touchObj->tp);
         uint16_t touch_x[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
         uint16_t touch_y[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
         uint16_t touch_strength[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
         uint8_t touch_cnt = 0;
-        bool touched=ESP_ERROR_CHECK_WITHOUT_ABORT(esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS));
-        ESP_LOGI(TAG,"Touching11 num=%d,x=%d,y=%d,touched=%d",touch_cnt,touch_x[0],touch_y[0],touched);
-
+        bool touched=esp_lcd_touch_get_coordinates(touchObj->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS);
         if(touch_cnt>0&&touched){
-            ESP_LOGI(TAG,"Touching num=%d,x=%d,y=%d",touch_cnt,touch_x[0],touch_y[0]);
+            //ESP_LOGI(TAG,"Touching num=%d,x=%d,y=%d",touch_cnt,touch_x[0],touch_y[0]);
             data->point.x = touch_x[0];
             data->point.y = touch_y[0];
             data->state = LV_INDEV_STATE_PRESSED;

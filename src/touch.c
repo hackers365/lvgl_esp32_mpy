@@ -18,9 +18,9 @@ static const char *TAG = "lvgl_esp32_touch";
 // get_finger_position 方法
 static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
     lvgl_esp32_Touch_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-    uint16_t touch_x[1];
-    uint16_t touch_y[1];
-    uint16_t touch_strength[1];
+    uint16_t touch_x[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
+    uint16_t touch_y[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
+    uint16_t touch_strength[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
     uint8_t touch_cnt = 0;
     esp_lcd_touch_read_data(self->tp);
     ESP_ERROR_CHECK(esp_lcd_touch_get_coordinates(self->tp, touch_x, touch_y, touch_strength, &touch_cnt, CONFIG_ESP_LCD_TOUCH_MAX_POINTS));
