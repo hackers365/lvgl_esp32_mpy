@@ -24,7 +24,6 @@ typedef struct lvgl_esp32_Touch_obj_t
     bool mirror_y;
     esp_lcd_touch_handle_t tp ;
     esp_lcd_panel_io_handle_t tp_io_handle ;
-    SemaphoreHandle_t touch_mux;
 } lvgl_esp32_Touch_obj_t;
 
 extern const mp_obj_type_t lvgl_esp32_Touch_type;

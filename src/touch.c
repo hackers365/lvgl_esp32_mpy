@@ -14,15 +14,7 @@
 #include "esp_log.h"
 #include "esp_lcd_touch_cst816s.h"
 static const char *TAG = "lvgl_esp32_touch";
-static void touch_callback(esp_lcd_touch_handle_t tp)
-{
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(touch_mux, &xHigherPriorityTaskWoken);
 
-    if (xHigherPriorityTaskWoken) {
-        portYIELD_FROM_ISR();
-    }
-}
 
 // get_finger_position 方法
 static mp_obj_t  lvgl_esp32_Touch_read_data(mp_obj_t self_ptr) {
@@ -189,7 +181,6 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     self->tp=NULL;
     self->tp_io_handle=NULL;
     ESP_LOGI(TAG, "New Touch Class scl:%d,sda:%d",self->scl,self->sda);
-    self->touch_mux = xSemaphoreCreateBinary();
     return MP_OBJ_FROM_PTR(self);
 }
 
