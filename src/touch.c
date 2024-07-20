@@ -105,7 +105,6 @@ static mp_obj_t lvgl_esp32_Touch_init(mp_obj_t self_ptr)
         .driver_data = NULL,
     };
     ESP_ERROR_CHECK(esp_lcd_touch_new_i2c_cst816s(self->tp_io_handle, &tp_cfg, &(self->tp)));
-    touch_mux=xSemaphoreCreateBinary();
     ESP_LOGI(TAG,"Initializing Touch touch Finish");
     return mp_obj_new_int_from_uint(0);
 }
@@ -184,8 +183,6 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     self->ic2_num=args[ARG_i2c_num].u_int;
     self->tp=NULL;
     self->tp_io_handle=NULL;
-    touch_mux=NULL;
-    ESP_LOGI(TAG, "New Touch Class scl:%d,sda:%d",self->scl,self->sda);
     return MP_OBJ_FROM_PTR(self);
 }
 
