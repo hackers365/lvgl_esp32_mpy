@@ -22,7 +22,7 @@ static void touch_callback(esp_lcd_touch_handle_t tp)
 
     if (xHigherPriorityTaskWoken)
     {
-        portYIELD_FROM_ISR();
+        portYIELD_FROM_ISR_NO_ARG();
     }
 }
 // get_finger_position 方法
