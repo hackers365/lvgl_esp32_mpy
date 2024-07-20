@@ -35,7 +35,6 @@ lv_ver.align_to(label,lv.ALIGN.BOTTOM_MID, 0, -10)
 
 def slider_event_cb(evt):
     slider = evt.get_target_obj()
-    print(slider.get_value())
     display.brightness(slider.get_value())
 #
 # Create a slider and write its value on a label.
