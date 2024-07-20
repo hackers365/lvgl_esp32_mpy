@@ -835,7 +835,7 @@ extern void mp_lv_init_gc();
      * Requires `LV_USE_SYSMON = 1`*/
     #define LV_USE_PERF_MONITOR 1
     #if LV_USE_PERF_MONITOR
-        #define LV_USE_PERF_MONITOR_POS LV_ALIGN_TOP_MID
+        #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_MID
 
         /*0: Displays performance data on the screen, 1: Prints performance data using log.*/
         #define LV_USE_PERF_MONITOR_LOG_MODE 0
