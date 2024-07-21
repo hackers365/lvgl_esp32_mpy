@@ -9,7 +9,7 @@ spi = lvgl_esp32.QSPI(
     data1=12,
     data2=13,
     data3=14,
-    max_transfer_s=int(360*96)
+    max_transfer_s=int(360*96*24)
 )
 spi.init()
 print("SPI INITED")
