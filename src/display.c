@@ -287,7 +287,7 @@ static void clear(lvgl_esp32_Display_obj_t *self)
 
     // Create a temporary empty buffer of only one line of pixels so this will also work on memory-constrained devices
     size_t buf_size = self->width;
-    uint8_t *buf = heap_caps_calloc(1, buf_size * 18, MALLOC_CAP_DMA);
+    uint8_t *buf = heap_caps_calloc(1, buf_size * 16, MALLOC_CAP_DMA);
 
     assert(buf);
 
@@ -344,7 +344,7 @@ static mp_obj_t lvgl_esp32_Display_init(mp_obj_t self_ptr)
     esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = self->reset,
         .rgb_ele_order = self->bgr ? LCD_RGB_ELEMENT_ORDER_BGR : LCD_RGB_ELEMENT_ORDER_RGB,
-        .bits_per_pixel = 18,
+        .bits_per_pixel = 16,
         .vendor_config = &vendor_config
     };
 
