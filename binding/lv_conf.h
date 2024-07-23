@@ -51,9 +51,9 @@
  *====================*/
 
 /*Color depth: 8 (A8), 16 (RGB565), 24 (RGB888), 32 (XRGB8888)*/
-#define LV_COLOR_DEPTH 16
+#define LV_COLOR_DEPTH 24
 
-#define LV_COLOR_16_SWAP 1
+#define LV_COLOR_16_SWAP 0
 
 #define LV_COLOR_SCREEN_TRANSP 0
 
@@ -100,7 +100,7 @@
  *====================*/
 
 /*Default display refresh, input device read and animation step period.*/
-#define LV_DEF_REFR_PERIOD  16      /*[ms]*/
+#define LV_DEF_REFR_PERIOD  30      /*[ms]*/
 
 /*Default Dot Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
  *(Not so important, you can adjust it to modify default sizes and spaces)*/
