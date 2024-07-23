@@ -53,7 +53,7 @@ static void IRAM_ATTR flush_cb(lv_display_t *display, const lv_area_t *area, uin
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) lv_display_get_user_data(display);;
     //ESP_LOGI(TAG, "flush_cb: x1=%ld.y1=%ld.x2=%ld.y2=%ld",area->x1,area->y1,area->x2+1,area->y2+1);
     // Correct byte order
-    //lv_draw_sw_rgb565_swap(data, self->buf_size);
+    lv_draw_sw_rgb565_swap(data, self->buf_size);
 
     // Blit to the screen
     lvgl_esp32_Display_draw_bitmap(self->display, area->x1, area->y1, area->x2 + 1, area->y2 + 1, data);
