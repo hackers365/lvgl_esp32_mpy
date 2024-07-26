@@ -27,9 +27,8 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
         /home/yaojz/data2/pnglib/include
 )
-link_directories(/home/yaojz/data2/pnglib/lib)
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
-find_library(PNB_LIB png)
+find_library(PNB_LIB png /home/yaojz/data2/pnglib/lib)
 message("png库:${PNG_LIB}")
 target_link_libraries(usermod INTERFACE usermod_lvgl_esp32)
 target_link_libraries(usermod INTERFACE "${PNG_LIB}")
