@@ -1,4 +1,6 @@
 file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c)
+file(GLOB_RECURSE SOURCES /usr/include/png.h)
+
 #file(GLOB_RECURSE EXAMPLE_SOURCES ${LVGL_ROOT_DIR}/examples/*.c)
 # With micropython, build lvgl as interface library, link chain is:
 # lvgl_interface [lvgl] → usermod_lvgl_bindings [lv_bindings] → usermod
@@ -18,5 +20,5 @@ target_compile_options(lvgl_interface INTERFACE -Wno-unused-function)
 target_include_directories(lvgl_interface INTERFACE
 		${USER_COMPONENT_DIR}/rlottie/rlottie/inc
 		${IDF_PATH}/components/heap/include
-		/usr/include
+
 )
