@@ -21,5 +21,4 @@ target_include_directories(lvgl_interface INTERFACE
 		${IDF_PATH}/components/heap/include
 		/home/yaojz/data2/pnglib/include
 )
-link_directories(/home/yaojz/data2/pnglib/lib)
-target_link_libraries(lvgl_interface INTERFACE png)
+target_link_libraries(lvgl_interface INTERFACE /home/yaojz/data2/pnglib/lib/libpng.a)
