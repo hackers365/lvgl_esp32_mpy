@@ -7,6 +7,7 @@ import lvgl_esp32
 import os
 wrapper = lvgl_esp32.Wrapper(display,touch)
 wrapper.init()
+os.listdir('/sd')
 display.brightness(100)
 #顺时转180度
 display.swapXY(False)
@@ -16,13 +17,8 @@ touch.swapXY(False)
 touch.mirrorX(True)
 touch.mirrorY(True)
 screen = lv.screen_active()
-screen.set_style_bg_color(lv.color_hex(0xFF0000), lv.PART.MAIN | lv.STATE.DEFAULT)
+screen.set_style_bg_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
 screen.set_style_bg_opa(255, lv.PART.MAIN | lv.STATE.DEFAULT)
-screen.set_style_bg_grad_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
-screen.set_style_bg_main_stop(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-screen.set_style_bg_grad_stop(255, lv.PART.MAIN | lv.STATE.DEFAULT)
-screen.set_style_bg_grad_dir(lv.GRAD_DIR.VER, lv.PART.MAIN | lv.STATE.DEFAULT)
-
 label = lv.label(screen)
 label.set_text(f"MicroPython{os.uname()[2]}")
 label.set_style_text_color(lv.color_hex(0xffffff), lv.PART.MAIN)

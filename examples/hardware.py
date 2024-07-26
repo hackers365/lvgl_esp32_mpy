@@ -44,4 +44,3 @@ touch.init()
 
 sdcard=machine.SDCard(clk=3,cmd=4,d0=2,d1=1,d2=6,d3=5)
 vfs.mount(sdcard,'/sd')
-os.list('/sd')
