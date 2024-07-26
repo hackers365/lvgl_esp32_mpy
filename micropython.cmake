@@ -31,4 +31,4 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 
 target_link_libraries(usermod INTERFACE usermod_lvgl_esp32)
-target_link_libraries(usermod /home/yaojz/data2/pnglib/lib/libpng.a)
+target_link_libraries(usermod INTERFACE /home/yaojz/data2/pnglib/lib/libpng.a)
