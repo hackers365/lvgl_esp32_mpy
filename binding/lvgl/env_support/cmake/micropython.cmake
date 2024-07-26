@@ -21,5 +21,5 @@ target_include_directories(lvgl_interface INTERFACE
 		${IDF_PATH}/components/heap/include
 		/home/yaojz/data2/pnglib/include
 )
-file(GLOB_RECURSE PNG /home/yaojz/data2/pnglib/lib/*.a)
-target_link_libraries(lvgl_interface INTERFACE PNG)
+link_directories(/home/yaojz/data2/pnglib/lib/)
+target_link_libraries(lvgl_interface INTERFACE pnb)
