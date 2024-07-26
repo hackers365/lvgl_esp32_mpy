@@ -30,6 +30,6 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
 link_directories(/home/yaojz/data2/pnglib/lib)
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 find_library(PNB_LIB png)
-message("${PNG_LIB}")
+message("png库:${PNG_LIB}")
 target_link_libraries(usermod INTERFACE usermod_lvgl_esp32)
 target_link_libraries(usermod INTERFACE "${PNG_LIB}")
