@@ -10,7 +10,7 @@
 #if LV_USE_LIBPNG
 
 #include "lv_libpng.h"
-#include <png.h>
+#include "png.h"
 
 /*********************
  *      DEFINES
