@@ -1,7 +1,9 @@
 # Make sure LVGL gets built
 add_compile_options("-Wno-unused-value")
 add_compile_options("-Wno-error")
-
+add_library(usermod_lvgl_esp32 INTERFACE)
+find_package(PNG REQUIRED)
+include_directories(${PNG_INCLUDE_DIR})
 include(${CMAKE_CURRENT_LIST_DIR}/binding/binding.cmake)
 
 add_library(usermod_lvgl_esp32 INTERFACE)
@@ -26,6 +28,8 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
 )
+
+target_link_libraries(usermod_lvgl_esp32 INTERFACE ${PNG_LIBRARIES})
 
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 
