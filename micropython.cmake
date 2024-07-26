@@ -2,8 +2,7 @@
 add_compile_options("-Wno-unused-value")
 add_compile_options("-Wno-error")
 add_library(usermod_lvgl_esp32 INTERFACE)
-find_package(PNG REQUIRED)
-include_directories(${PNG_INCLUDE_DIR})
+include_directories(/usr/include/usr/include)
 include(${CMAKE_CURRENT_LIST_DIR}/binding/binding.cmake)
 
 add_library(usermod_lvgl_esp32 INTERFACE)
