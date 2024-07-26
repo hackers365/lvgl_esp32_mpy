@@ -22,4 +22,4 @@ target_include_directories(lvgl_interface INTERFACE
 		/home/yaojz/data2/pnglib/include
 )
 link_directories(/home/yaojz/data2/pnglib/lib/)
-target_link_libraries(lvgl_interface INTERFACE pnb)
+target_link_libraries(lvgl_interface INTERFACE png)
