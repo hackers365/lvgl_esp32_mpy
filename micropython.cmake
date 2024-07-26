@@ -25,13 +25,7 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/interface/
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
-        /home/yaojz/data2/pnglib/include
 )
-link_directories(/home/yaojz/data2/pnglib/lib)
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 target_link_libraries(usermod INTERFACE usermod_lvgl_esp32)
-add_library(png SHARED IMPORTED) # or STATIC instead of SHARED
-set_target_properties(png PROPERTIES
-        IMPORTED_LOCATION "/home/yaojz/data2/pnglib/lib/libpng.a"
-        )
-target_link_libraries(usermod INTERFACE png)
+
