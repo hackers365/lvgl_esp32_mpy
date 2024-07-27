@@ -40,3 +40,7 @@ make BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM_OCT USER_C_MODULES=<DIR>/lvgl_e
 ## 固件下载
 >- 目录[dist](./dist)下已经存放编译好的固件,16位，限制30FPS，支持png,SD卡,用[flash_download_tool_3.9.5](https://www.espressif.com/sites/default/files/tools/flash_download_tool_3.9.5.zip)烧录固件
 >- 使用Thonny上传[example](./examples)文件运行示例代码。
+
+## 效果展示
+1. 亮度调节滑块![slider.gif](assets%2Fslider.gif)
+2. 加密货币价格展示![crypto_currency.png](assets%2Fcrypto_currency.png)
