@@ -179,7 +179,7 @@ static void lv_rlottie_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj
 
     if(rlottie->allocated_buf) {
         //lv_free(rlottie->allocated_buf);
-        heap_caps_free(rlottie->allocated_buf)
+        heap_caps_free(rlottie->allocated_buf);
         rlottie->allocated_buf = NULL;
         rlottie->allocated_buffer_size = 0;
     }
