@@ -21,5 +21,3 @@ target_include_directories(lvgl_interface INTERFACE
 		${USER_COMPONENT_DIR}/libpng/libpng
 		${IDF_PATH}/components/heap/include
 )
-target_compile_definitions(lvgl_interface INTERFACE "-DESP_PLATFORM")
-target_compile_definitions(lvgl_interface INTERFACE "-DLV_ATTRIBUTE_FAST_MEM=IRAM_ATTR")

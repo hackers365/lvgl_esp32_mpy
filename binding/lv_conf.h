@@ -118,7 +118,8 @@
  * - LV_OS_WINDOWS
  * - LV_OS_CUSTOM */
 #define LV_USE_OS   LV_OS_FREERTOS
-
+#define ESP_PLATFORM 1
+#define
 #if LV_USE_OS == LV_OS_CUSTOM
     #define LV_OS_CUSTOM_INCLUDE <stdint.h>
 #endif
