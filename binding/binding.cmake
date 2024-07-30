@@ -66,7 +66,7 @@ if (NOT EXISTS ${LVGL_MPY})
 endif ()
 add_library(usermod_lv_bindings INTERFACE)
 target_sources(usermod_lv_bindings INTERFACE ${LVGL_MPY})
-target_include_directories(usermod_lv_bindings INTERFACE ${LVGL_BINDINGS_DIR})
+target_include_directories(usermod_lv_bindings INTERFACE ${LVGL_BINDINGS_DIR} ${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include/freertos)
 
 target_link_libraries(usermod_lv_bindings INTERFACE lvgl_interface)
 
