@@ -119,7 +119,6 @@
  * - LV_OS_CUSTOM */
 #define LV_USE_OS   LV_OS_FREERTOS
 #define ESP_PLATFORM 1
-#define
 #if LV_USE_OS == LV_OS_CUSTOM
     #define LV_OS_CUSTOM_INCLUDE <stdint.h>
 #endif
@@ -431,7 +430,7 @@ extern void mp_lv_init_gc();
 #define LV_ATTRIBUTE_LARGE_RAM_ARRAY
 
 /*Place performance critical functions into a faster memory (e.g RAM)*/
-#define LV_ATTRIBUTE_FAST_MEM
+#define LV_ATTRIBUTE_FAST_MEM IRAM_ATTR
 
 /*Export integer constant to binding. This macro is used with constants in the form of LV_<CONST> that
  *should also appear on LVGL binding API such as Micropython.*/
