@@ -20,4 +20,5 @@ target_include_directories(lvgl_interface INTERFACE
 		${USER_COMPONENT_DIR}/rlottie/rlottie/inc
 		${USER_COMPONENT_DIR}/libpng/libpng
 		${IDF_PATH}/components/heap/include
+		${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include
 )
