@@ -18,7 +18,6 @@ target_sources(lvgl_interface INTERFACE ${SOURCES})
 target_compile_options(lvgl_interface INTERFACE -Wno-unused-function)
 target_include_directories(lvgl_interface INTERFACE
 		${IDF_PATH}/components/heap/include
-		${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include/freertos
 		${USER_COMPONENT_DIR}/rlottie/rlottie/inc
 		${USER_COMPONENT_DIR}/libpng/libpng
 

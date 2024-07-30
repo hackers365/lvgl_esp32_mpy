@@ -25,7 +25,6 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/interface/
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
-        ${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include/freertos
 )
 target_link_libraries(usermod_lvgl_esp32 INTERFACE lvgl_interface)
 target_link_libraries(usermod INTERFACE usermod_lvgl_esp32)
