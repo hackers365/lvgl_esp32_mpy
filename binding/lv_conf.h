@@ -68,7 +68,7 @@
  * - LV_STDLIB_RTTHREAD:    RT-Thread implementation
  * - LV_STDLIB_CUSTOM:      Implement the functions externally
  */
-#define LV_USE_STDLIB_MALLOC    LV_STDLIB_MICROPYTHON
+#define LV_USE_STDLIB_MALLOC    LV_STDLIB_CLIB
 #define LV_USE_STDLIB_STRING    LV_STDLIB_BUILTIN
 #define LV_USE_STDLIB_SPRINTF   LV_STDLIB_BUILTIN
 
@@ -342,7 +342,7 @@ extern void mp_lv_init_gc();
 #ifdef MICROPY_CACHE_SIZE
     #define LV_CACHE_DEF_SIZE   MICROPY_CACHE_SIZE
 #else
-    #define LV_CACHE_DEF_SIZE   (3*1024*1024)
+    #define LV_CACHE_DEF_SIZE   (1*1024*1024)
 #endif
 
 /*Default number of image header cache entries. The cache is used to store the headers of images
