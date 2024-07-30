@@ -22,3 +22,4 @@ target_include_directories(lvgl_interface INTERFACE
 		${IDF_PATH}/components/heap/include
 		${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include/freertos
 )
+message("引用${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include/freertos")
