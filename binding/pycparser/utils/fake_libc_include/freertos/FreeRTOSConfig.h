@@ -59,7 +59,7 @@
 
 /* The arch-specific FreeRTOSConfig_arch.h in esp_additions/arch_include/<arch>.
  * Placed here due to configSTACK_OVERHEAD_TOTAL. Todo: IDF-5712. */
-#include "freertos/FreeRTOSConfig_arch.h"
+//#include "freertos/FreeRTOSConfig_arch.h"
 
 /* ------------------------------------------------- FreeRTOS Config ---------------------------------------------------
  * - All Vanilla FreeRTOS configuration goes into this section
