@@ -23,6 +23,7 @@ target_include_directories(usermod_lvgl_esp32 INTERFACE
         ${IDF_PATH}/components/esp_lcd/include/
         ${IDF_PATH}/components/esp_lcd/include/
         ${IDF_PATH}/components/esp_lcd/interface/
+        ${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl
         ${CMAKE_CURRENT_LIST_DIR}/binding/lvgl/src
 )
