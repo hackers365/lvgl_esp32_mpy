@@ -125,6 +125,8 @@ static void lv_rlottie_constructor(const lv_obj_class_t * class_p, lv_obj_t * ob
     }
 
     rlottie->total_frames = lottie_animation_get_totalframe(rlottie->animation);
+    LV_LOG_INFO("The aniamtion total_frames:%d",rlottie->total_frames );
+
     rlottie->framerate = (size_t)lottie_animation_get_framerate(rlottie->animation);
     rlottie->current_frame = 0;
 
