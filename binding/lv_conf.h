@@ -342,7 +342,7 @@ extern void mp_lv_init_gc();
 #ifdef MICROPY_CACHE_SIZE
     #define LV_CACHE_DEF_SIZE   MICROPY_CACHE_SIZE
 #else
-    #define LV_CACHE_DEF_SIZE   (3*1024*1024)
+    #define LV_CACHE_DEF_SIZE   0
 #endif
 
 /*Default number of image header cache entries. The cache is used to store the headers of images
