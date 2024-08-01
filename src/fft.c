@@ -696,6 +696,21 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
   output[3*stride_out+1] = t1 - t2;
 }
 
+static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_in, mp_obj_t input_list) {
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    size_t len;
+    mp_obj_t *items;
+    mp_obj_get_array(input_list, &len, &items);
+
+    fft_execute(self->config);
+    // 创建返回列表
+    mp_obj_t result = mp_obj_new_list(len, NULL);
+    for (size_t i = 0; i < len; i++) {
+        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_float(output[i]));
+    }
+    return result;
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_FFT_execute_obj, lvgl_esp32_FFT_execute);
 
 static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
 {
@@ -763,6 +778,8 @@ static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&lvgl_esp32_FFT_init_obj) },
         { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
+        { MP_ROM_QSTR(MP_QSTR_execute), MP_ROM_PTR(&lvgl_esp32_FFT_execute_obj) },
+
         //常量
         { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
         { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
