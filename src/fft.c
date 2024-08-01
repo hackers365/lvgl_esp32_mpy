@@ -728,14 +728,14 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     enum
     {
         ARG_size,
-        ARG_type,
+        ARG_fftType,
         ARG_direction,
 
     };
 
     static const mp_arg_t allowed_args[] = {
             { MP_QSTR_size, MP_ARG_INT | MP_ARG_REQUIRED },
-            { MP_QSTR_type, MP_ARG_INT | MP_ARG_REQUIRED },
+            { MP_QSTR_fftType, MP_ARG_INT | MP_ARG_REQUIRED },
             { MP_QSTR_direction, MP_ARG_INT | MP_ARG_REQUIRED },
     };
 
@@ -745,7 +745,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     lvgl_esp32_FFT_obj_t *self = mp_obj_malloc_with_finaliser(lvgl_esp32_FFT_obj_t, &lvgl_esp32_FFT_type);
 
     int size = args[ARG_size].u_int;
-    int type = args[ARG_type].u_int;
+    int fft_type = args[ARG_fftType].u_int;
     int direction= args[ARG_direction].u_int;
     if(type !=FFT_REAL and type!=FFT_COMPLEX){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid type"));
@@ -754,7 +754,7 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
         mp_raise_ValueError(MP_ERROR_TEXT("invalid direction"));
     }
     self->size=size;
-    self->type=type;
+    self->type=fft_type;
     self->direction=direction;
     self->config=NULL;
     return MP_OBJ_FROM_PTR(self);

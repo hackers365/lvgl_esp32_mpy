@@ -81,7 +81,7 @@ typedef struct lvgl_esp32_FFT_obj_t
 {
     mp_obj_base_t base;
     int size;
-    int type;
+    int fft_type;
     int direction;
     fft_config_t *config;
 } lvgl_esp32_FFT_obj_t;
