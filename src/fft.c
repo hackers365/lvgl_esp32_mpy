@@ -716,9 +716,9 @@ static mp_obj_t lvgl_esp32_FTT_deinit(mp_obj_t self_ptr)
     ESP_LOGI(TAG, "Destroy FFT");
     return mp_obj_new_int_from_uint(0);
 }
-static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FTT_deinit_obj, lvgl_esp32_FTT_deinit);
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FTT_deinit_obj, lvgl_esp32_FFT_deinit);
 
-static mp_obj_t lvgl_esp32_Touch_make_new(
+static mp_obj_t lvgl_esp32_FFT_make_new(
         const mp_obj_type_t *type,
         size_t n_args,
         size_t n_kw,
@@ -747,14 +747,14 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     int size = args[ARG_size].u_int;
     int fft_type = args[ARG_fftType].u_int;
     int direction= args[ARG_direction].u_int;
-    if(type !=FFT_REAL && type!=FFT_COMPLEX){
+    if(fft_type !=FFT_REAL && fft_type!=FFT_COMPLEX){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid type"));
     }
     if(direction !=FFT_FORWARD && direction!=FFT_BACKWARD){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid direction"));
     }
     self->size=size;
-    self->type=fft_type;
+    self->fft_type=fft_type;
     self->direction=direction;
     self->config=NULL;
     return MP_OBJ_FROM_PTR(self);
