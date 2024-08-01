@@ -703,8 +703,10 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     mp_obj_t *items;
     mp_obj_get_array(input_list, &len, &items);
     if(len!=self->config->size){
+        ESP_LOGE(TAG,"FFT ERR LEN:%d",len,self->config->size);
         mp_raise_ValueError(MP_ERROR_TEXT("invalid len"));
     }
+    ESP_LOGI(TAG,"FFT COPY");
     // 复制输入数据
     for (size_t i = 0; i < len; i++) {
         self->config->input[i] = mp_obj_get_float(items[i]);
