@@ -700,14 +700,14 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
 static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-    self->config=fft_init(self->size,self->type,self->direction,NULL,NULL);
+    self->config=fft_init(self->size,self->fft_type,self->direction,NULL,NULL);
 
     ESP_LOGI(TAG,"Initializing FFT");
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_init_obj, lvgl_esp32_FFT_init);
 
-static mp_obj_t lvgl_esp32_FTT_deinit(mp_obj_t self_ptr)
+static mp_obj_t lvgl_esp32_FFT_deinit(mp_obj_t self_ptr)
 {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     if(self->config){
