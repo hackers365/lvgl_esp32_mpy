@@ -704,6 +704,10 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     if(len!=self->config){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid len"));
     }
+    // 复制输入数据
+    for (size_t i = 0; i < len; i++) {
+        self->config->input[i] = mp_obj_get_float(items[i]);
+    }
     fft_execute(self->config);
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len, NULL);
