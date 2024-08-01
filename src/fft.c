@@ -704,6 +704,7 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     size_t len;
     mp_obj_t *items;
     mp_obj_get_array(input_list, &len, &items);
+    ESP_LOGI(TAG,"FFT Get Input len:%d",len);
     if(len!=self->config->size){
         ESP_LOGI(TAG,"FFT ERR LEN:%d,CONFIG:%d",len,self->config->size);
         mp_raise_ValueError(MP_ERROR_TEXT("invalid len"));
