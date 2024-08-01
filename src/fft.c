@@ -65,7 +65,8 @@ fft_config_t *fft_init(int size, fft_type_t type, fft_direction_t direction, flo
   config->type = type;
   config->direction = direction;
   config->size = size;
-
+  config->input = NULL;
+  config->output = NULL;
   // Allocate and precompute twiddle factors
   config->twiddle_factors = (float *)malloc(2 * config->size * sizeof(float));
 
