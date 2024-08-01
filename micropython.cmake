@@ -16,6 +16,7 @@ target_sources(usermod_lvgl_esp32 INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/src/touch.c
         ${CMAKE_CURRENT_LIST_DIR}/src/wrapper.c
         ${CMAKE_CURRENT_LIST_DIR}/src/module.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/fft.c
 )
 message("IDF路径:${IDF_PATH}")
 message("compoonents路径:${USER_COMPONENT_DIR}")
