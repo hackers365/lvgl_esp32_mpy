@@ -40,10 +40,13 @@
 #include <complex.h>
 
 #include "fft.h"
-
+#include "py/runtime.h"
+#include "esp_err.h"
+#include "esp_log.h"
 #define TWO_PI 6.28318530
 #define USE_SPLIT_RADIX 1
 #define LARGE_BASE_CASE 1
+static const char *TAG = "lvgl_esp32_fft";
 
 fft_config_t *fft_init(int size, fft_type_t type, fft_direction_t direction, float *input, float *output)
 {
@@ -697,7 +700,7 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
 static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-    self->config=fft_init(self->size,self->type,self->direction);
+    self->config=fft_init(self->size,self->type,self->direction,NULL,NULL);
 
     ESP_LOGI(TAG,"Initializing FFT");
     return mp_obj_new_int_from_uint(0);
