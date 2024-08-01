@@ -692,3 +692,91 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
   output[stride_out+1] = t1 + t2;
   output[3*stride_out+1] = t1 - t2;
 }
+
+
+static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
+{
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    self->config=fft_init(self->size,self->type,self->direction);
+
+    ESP_LOGI(TAG,"Initializing FFT");
+    return mp_obj_new_int_from_uint(0);
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_init_obj, lvgl_esp32_FFT_init);
+
+static mp_obj_t lvgl_esp32_FTT_deinit(mp_obj_t self_ptr)
+{
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    if(self->config){
+        fft_destroy(self->config);
+    }
+    ESP_LOGI(TAG, "Destroy FFT");
+    return mp_obj_new_int_from_uint(0);
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FTT_deinit_obj, lvgl_esp32_FTT_deinit);
+
+static mp_obj_t lvgl_esp32_Touch_make_new(
+        const mp_obj_type_t *type,
+        size_t n_args,
+        size_t n_kw,
+        const mp_obj_t *all_args
+)
+{
+    enum
+    {
+        ARG_size,
+        ARG_type,
+        ARG_direction,
+
+    };
+
+    static const mp_arg_t allowed_args[] = {
+            { MP_QSTR_size, MP_ARG_INT | MP_ARG_REQUIRED },
+            { MP_QSTR_type, MP_ARG_INT | MP_ARG_REQUIRED },
+            { MP_QSTR_direction, MP_ARG_INT | MP_ARG_REQUIRED },
+    };
+
+    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
+    mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
+
+    lvgl_esp32_FFT_obj_t *self = mp_obj_malloc_with_finaliser(lvgl_esp32_FFT_obj_t, &lvgl_esp32_FFT_type);
+
+    int size = args[ARG_size].u_int;
+    int type = args[ARG_type].u_int;
+    int direction= args[ARG_direction].u_int;
+    if(type !=FFT_REAL and type!=FFT_COMPLEX){
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid type"));
+    }
+    if(direction !=FFT_FORWARD and direction!=FFT_BACKWARD){
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid direction"));
+    }
+    self->size=size;
+    self->type=type;
+    self->direction=direction;
+    self->config=NULL;
+    return MP_OBJ_FROM_PTR(self);
+}
+static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
+        { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&lvgl_esp32_FFT_init_obj) },
+        { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
+        { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
+        //常量
+        { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
+        { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
+        //常量
+        { MP_ROM_QSTR(MP_QSTR_FORWARD),          MP_ROM_INT(FFT_FORWARD) },
+        { MP_ROM_QSTR(MP_QSTR_BACKWARD),       MP_ROM_INT(FFT_BACKWARD) },
+
+};
+
+static MP_DEFINE_CONST_DICT(lvgl_esp32_FFT_locals, lvgl_esp32_FFT_locals_table);
+
+MP_DEFINE_CONST_OBJ_TYPE(
+        lvgl_esp32_FFT_type,
+        MP_QSTR_FFT,
+        MP_TYPE_FLAG_NONE,
+        make_new,
+        lvgl_esp32_FFT_make_new,
+        locals_dict,
+&lvgl_esp32_FFT_locals
+);

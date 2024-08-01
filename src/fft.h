@@ -36,7 +36,7 @@
 */
 #ifndef __FFT_H__
 #define __FFT_H__
-
+#include "py/obj.h"
 typedef enum
 {
   FFT_REAL,
@@ -75,5 +75,17 @@ void split_radix_fft(float *x, float *y, int n, int stride, float *twiddle_facto
 void ifft_primitive(float *input, float *output, int n, int stride, float *twiddle_factors, int tw_stride);
 void fft8(float *input, int stride_in, float *output, int stride_out);
 void fft4(float *input, int stride_in, float *output, int stride_out);
+
+
+typedef struct lvgl_esp32_FFT_obj_t
+{
+    mp_obj_base_t base;
+    int size;
+    int type;
+    int direction;
+    fft_config_t *config;
+} lvgl_esp32_FFT_obj_t;
+
+extern const mp_obj_type_t lvgl_esp32_FFT_type;
 
 #endif // __FFT_H__
