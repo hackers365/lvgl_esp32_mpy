@@ -699,6 +699,8 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
 static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     ESP_LOGI(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    ESP_LOGI(TAG,"FFT Get Pointer");
+
     size_t len;
     mp_obj_t *items;
     mp_obj_get_array(input_list, &len, &items);
