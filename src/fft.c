@@ -696,7 +696,7 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
   output[3*stride_out+1] = t1 - t2;
 }
 
-static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_in, mp_obj_t input_list) {
+static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     size_t len;
     mp_obj_t *items;
@@ -706,7 +706,7 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_in, mp_obj_t input_list) {
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len, NULL);
     for (size_t i = 0; i < len; i++) {
-        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_float(output[i]));
+        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_float(self->config->output[i]));
     }
     return result;
 }
