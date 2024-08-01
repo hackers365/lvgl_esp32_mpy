@@ -747,10 +747,10 @@ static mp_obj_t lvgl_esp32_Touch_make_new(
     int size = args[ARG_size].u_int;
     int fft_type = args[ARG_fftType].u_int;
     int direction= args[ARG_direction].u_int;
-    if(type !=FFT_REAL and type!=FFT_COMPLEX){
+    if(type !=FFT_REAL && type!=FFT_COMPLEX){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid type"));
     }
-    if(direction !=FFT_FORWARD and direction!=FFT_BACKWARD){
+    if(direction !=FFT_FORWARD && direction!=FFT_BACKWARD){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid direction"));
     }
     self->size=size;
