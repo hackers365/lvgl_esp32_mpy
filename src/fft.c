@@ -748,9 +748,6 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
 
     fft_execute(self->config);
     ESP_LOGD(TAG,"FFT EXEC");
-    for(int i=1;i<self->size/2;i++){
-
-    }
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len/2, NULL);
     for (size_t i = 1; i <len/2; i++) {
