@@ -728,6 +728,7 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_FFT_execute_obj, lvgl_esp32_FFT_execute);
 
+/*
 static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
 {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
@@ -737,6 +738,7 @@ static mp_obj_t lvgl_esp32_FFT_init(mp_obj_t self_ptr)
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_init_obj, lvgl_esp32_FFT_init);
+*/
 
 static mp_obj_t lvgl_esp32_FFT_deinit(mp_obj_t self_ptr)
 {
@@ -787,7 +789,7 @@ static mp_obj_t lvgl_esp32_FFT_make_new(
     self->size=size;
     self->fft_type=fft_type;
     self->direction=direction;
-    self->config=NULL;
+    self->config=fft_init(self->size,self->fft_type,self->direction,NULL,NULL);
     return MP_OBJ_FROM_PTR(self);
 }
 static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
