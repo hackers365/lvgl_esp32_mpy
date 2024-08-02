@@ -1,6 +1,6 @@
 import uasyncio as asyncio
 from lvgl_esp32 import FFT
-
+import time
 #异步任务框架
 loop = asyncio.get_event_loop()
 
@@ -8,7 +8,7 @@ loop = asyncio.get_event_loop()
 from machine import I2S
 from machine import Pin
 import ustruct
-FFT_N=const(256)
+FFT_N=const(1024)
 FFT_R=const(16000)
 sck_pin = Pin(42)   # Serial clock output
 ws_pin = Pin(45)    # Word clock output
@@ -21,23 +21,27 @@ audio_in = I2S(1,
                rate=FFT_R,
                ibuf=FFT_R*2)
 IBUFF_LEN=FFT_N*2
+#读取音频数据
 async def main():
     fft_plan=FFT(FFT_N,FFT.REAL,FFT.FORWARD)
     sreader = asyncio.StreamReader(audio_in)
-    while True:
+    start_ms=time.ticks_ms()
+    loop=0
+    while loop<1000:
+        loop+=1
         buf=bytearray(IBUFF_LEN)
         buf_view=memoryview(buf)
         num_read =0
         while num_read<IBUFF_LEN:
             num_read+=await sreader.readinto(buf_view[num_read:])
         samples=ustruct.unpack('<'+'h'*(FFT_N),buf)
-        print(samples)
         fft_plan.execute(samples)
-        await asyncio.sleep_ms(FFT_R//FFT_N)
+
+    print("耗时:",time.ticks_diff(time.ticks_ms(),start_ms))
     #释放内存
     del fft_plan
 
-
-while True:
+if __name__ == '__main__':
     asyncio.create_task(main())
     loop.run_forever()
+
