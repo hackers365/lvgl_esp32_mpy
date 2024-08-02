@@ -720,12 +720,12 @@ int constrain(int x,int a,int b){
  return x;
 }
 
-static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input_list,mp_obj_t range,mp_obj_t win_height) {
+static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input_list,mp_obj_t map_range,mp_obj_t win_height) {
     ESP_LOGI(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     ESP_LOGD(TAG,"FFT Get Pointer");
-    mp_uint_t range=mp_obj_get_int(range);
-    mp_uint_t win_height=mp_obj_get_int(win_height);
+    mp_uint_t range=mp_obj_get_int(map_range);
+    mp_uint_t height=mp_obj_get_int(win_height);
 
     size_t len;
     mp_obj_t *items;
@@ -854,7 +854,7 @@ static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_execute), MP_ROM_PTR(&lvgl_esp32_FFT_execute_obj) },
-        { MP_ROM_QSTR(MP_QSTR_execute_fitwin), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fit_win_obj) },
+        { MP_ROM_QSTR(MP_QSTR_execute_fit_win), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fit_win_obj) },
         //常量
         { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
         { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
