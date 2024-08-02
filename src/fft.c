@@ -752,7 +752,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input
     ESP_LOGD(TAG,"FFT OK");
     return result;
 }
-static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_FFT_execute_fitwin_obj, lvgl_esp32_FFT_execute_fitwin);
+static MP_DEFINE_CONST_FUN_OBJ_4(lvgl_esp32_FFT_execute_fitwin_obj, lvgl_esp32_FFT_execute_fitwin);
 
 static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     ESP_LOGI(TAG,"FFT execute");
