@@ -721,7 +721,9 @@ int constrain(int x,int a,int b){
 }
 
 static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *args) {
-    ESP_LOGI(TAG,"FFT fit_win execute");
+    ESP_LOGI(TAG,"FFT execute");
+    lvgl_esp32_FFT_obj_t *self = args[0];
+    ESP_LOGD(TAG,"FFT Get Pointer");
     if(n_args!=5){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid arguments length:input,map_start,map_end,win_height"));
     }
