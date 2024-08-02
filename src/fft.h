@@ -75,8 +75,8 @@ void split_radix_fft(float *x, float *y, int n, int stride, float *twiddle_facto
 void ifft_primitive(float *input, float *output, int n, int stride, float *twiddle_factors, int tw_stride);
 void fft8(float *input, int stride_in, float *output, int stride_out);
 void fft4(float *input, int stride_in, float *output, int stride_out);
-int map(float x,int in_min,int in_max,int out_min,int out_max);
-int constrain(int x,int a,int b);
+float map(float x,float in_min,float in_max,float out_min,float out_max);
+float constrain(float x,float a,float b);
 typedef struct lvgl_esp32_FFT_obj_t
 {
     mp_obj_base_t base;

@@ -704,7 +704,7 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
  * @param out_max
  * @return
  */
-int map(float x,int in_min,int in_max,int out_min,int out_max){
+int map(float x,float in_min,float in_max,float out_min,float out_max){
     return (x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min;
 }
 /**
@@ -714,7 +714,7 @@ int map(float x,int in_min,int in_max,int out_min,int out_max){
  * @param b
  * @return
  */
-int constrain(int x,int a,int b){
+float constrain(float x,float a,float b){
  if(x<a) return a;
  if(x>b) return b;
  return x;
@@ -755,9 +755,13 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     ESP_LOGD(TAG,"FFT EXEC");
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len/2, NULL);
-    mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(0), mp_obj_new_int(self->config->output[0]));
-    for (size_t i = 1; i <len/2; i++) {
-        double magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
+    for (size_t i = 0; i <len/2; i++) {
+        double magnitude=0;
+        if(i==0){
+            magnitude= self->config->output[0];
+        }else{
+            magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
+        }
         magnitude= constrain(magnitude,0,range_end);
         magnitude=map(magnitude,0,range_end,0,height);
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
