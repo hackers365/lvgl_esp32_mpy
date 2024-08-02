@@ -9,8 +9,7 @@ from machine import I2S
 from machine import Pin
 import ustruct
 FFT_N=const(256)
-FFT_R=const(8000)
-BYTELEN=ustruct.calcsize('h')
+FFT_R=const(16000)
 sck_pin = Pin(42)   # Serial clock output
 ws_pin = Pin(45)    # Word clock output
 sd_pin = Pin(46)    # Serial data output
@@ -20,19 +19,21 @@ audio_in = I2S(1,
                bits=16,
                format=I2S.MONO,
                rate=FFT_R,
-               ibuf=FFT_R*BYTELEN)
-buf=bytearray(FFT_N*BYTELEN)
+               ibuf=FFT_R*2)
+IBUFF_LEN=FFT_N*2
 async def main():
     fft_plan=FFT(FFT_N,FFT.REAL,FFT.FORWARD)
     sreader = asyncio.StreamReader(audio_in)
     while True:
-        num_read = await sreader.readinto(buf)
-        if num_read>0:
-            samples=ustruct.unpack('<'+'h'*(num_read//2),buf[:num_read])
-            print(len(samples))
-            #print(samples)
-            fft_plan.execute(samples)
-            await asyncio.sleep_ms(FFT_R//FFT_N)
+        buf=bytearray(IBUFF_LEN)
+        buf_view=memoryview(buf)
+        num_read =0
+        while num_read<IBUFF_LEN:
+            num_read+=await sreader.readinto(buf_view[num_read:])
+        samples=ustruct.unpack('<'+'h'*(FFT_N),buf)
+        print(samples)
+        fft_plan.execute(samples)
+        await asyncio.sleep_ms(FFT_R//FFT_N)
     #释放内存
     del fft_plan
 
