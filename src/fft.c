@@ -752,7 +752,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input
     ESP_LOGD(TAG,"FFT OK");
     return result;
 }
-static MP_DEFINE_CONST_FUN_OBJ_4(lvgl_esp32_FFT_execute_fitwin_obj, lvgl_esp32_FFT_execute_fitwin);
+static MP_DEFINE_CONST_FUN_OBJ_4(lvgl_esp32_FFT_execute_fit_win_obj, lvgl_esp32_FFT_execute_fit_win);
 
 static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     ESP_LOGI(TAG,"FFT execute");
@@ -854,7 +854,7 @@ static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_execute), MP_ROM_PTR(&lvgl_esp32_FFT_execute_obj) },
-        { MP_ROM_QSTR(MP_QSTR_execute_fitwin), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fitwin_obj) },
+        { MP_ROM_QSTR(MP_QSTR_execute_fitwin), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fit_win_obj) },
         //常量
         { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
         { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
