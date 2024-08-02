@@ -719,7 +719,12 @@ int constrain(int x,int a,int b){
  if(x>b) return b;
  return x;
 }
-
+/**
+ * 直接输出振幅结果，需要一些范围映射参数
+ * @param n_args
+ * @param args
+ * @return
+ */
 static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *args) {
     ESP_LOGI(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = args[0];
