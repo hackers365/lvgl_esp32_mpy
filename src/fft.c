@@ -695,6 +695,64 @@ inline void fft4(float *input, int stride_in, float *output, int stride_out)
   output[stride_out+1] = t1 + t2;
   output[3*stride_out+1] = t1 - t2;
 }
+/**
+ * 范围映射
+ * @param x
+ * @param in_min
+ * @param in_max
+ * @param out_min
+ * @param out_max
+ * @return
+ */
+int map(float x,int in_min,int in_max,int out_min,int out_max){
+    return (x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min;
+}
+/**
+ * 约束范围
+ * @param x
+ * @param a
+ * @param b
+ * @return
+ */
+int constrain(int x,int a,int b){
+ if(x<a) return a;
+ if(x>b) return b;
+ return x;
+}
+
+static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input_list,mp_obj_t range,mp_obj_t win_height) {
+    ESP_LOGI(TAG,"FFT execute");
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    ESP_LOGD(TAG,"FFT Get Pointer");
+    mp_uint_t range=mp_obj_get_int(range);
+    mp_uint_t win_height=mp_obj_get_int(win_height);
+
+    size_t len;
+    mp_obj_t *items;
+    mp_obj_get_array(input_list, &len, &items);
+    ESP_LOGD(TAG,"FFT Get Input len:%d",len);
+    if(len!=self->config->size){
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid len"));
+    }
+    ESP_LOGD(TAG,"FFT COPY");
+    // 复制输入数据
+    for (size_t i = 0; i < len; i++) {
+        self->config->input[i] = map(mp_obj_get_float(items[i]),INT16_MIN,INT16_MAX,-range,range);
+    }
+    ESP_LOGD(TAG,"FFT INPUT");
+
+    fft_execute(self->config);
+    ESP_LOGD(TAG,"FFT EXEC");
+
+    // 创建返回列表
+    mp_obj_t result = mp_obj_new_list(len, NULL);
+    for (size_t i = 0; i <len; i++) {
+        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_float(self->config->output[i]));
+    }
+    ESP_LOGD(TAG,"FFT OK");
+    return result;
+}
+static MP_DEFINE_CONST_FUN_OBJ_2(lvgl_esp32_FFT_execute_fitwin_obj, lvgl_esp32_FFT_execute_fitwin);
 
 static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     ESP_LOGI(TAG,"FFT execute");
@@ -796,7 +854,7 @@ static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_execute), MP_ROM_PTR(&lvgl_esp32_FFT_execute_obj) },
-
+        { MP_ROM_QSTR(MP_QSTR_execute_fitwin), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fitwin_obj) },
         //常量
         { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
         { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
