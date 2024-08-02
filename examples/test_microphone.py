@@ -10,7 +10,6 @@ from machine import Pin
 import ustruct
 FFT_N=const(256)
 FFT_R=const(8000)
-FFT_T=const(1)
 BYTELEN=ustruct.calcsize('h')
 sck_pin = Pin(42)   # Serial clock output
 ws_pin = Pin(45)    # Word clock output
@@ -21,7 +20,7 @@ audio_in = I2S(1,
                bits=16,
                format=I2S.MONO,
                rate=FFT_R,
-               ibuf=FFT_R*BYTELEN*FFT_T)
+               ibuf=FFT_R*BYTELEN)
 buf=bytearray(FFT_N*BYTELEN)
 async def main():
     fft_plan=FFT(FFT_N,FFT.REAL,FFT.FORWARD)
