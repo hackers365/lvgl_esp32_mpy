@@ -21,7 +21,7 @@ audio_in = I2S(1,
                bits=16,
                format=I2S.MONO,
                rate=FFT_R,
-               ibuf=FFT_R*BYTELEN)
+               ibuf=FFT_R*BYTELEN*FFT_T)
 buf=bytearray(FFT_N*BYTELEN)
 async def main():
     fft_plan=FFT(FFT_N,FFT.REAL,FFT.FORWARD)
