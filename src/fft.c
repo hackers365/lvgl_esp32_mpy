@@ -724,8 +724,8 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(mp_obj_t self_ptr, mp_obj_t input
     ESP_LOGI(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     ESP_LOGD(TAG,"FFT Get Pointer");
-    mp_uint_t range=mp_obj_get_int(map_range);
-    mp_uint_t height=mp_obj_get_int(win_height);
+    int range=mp_obj_get_int(map_range);
+    int height=mp_obj_get_int(win_height);
 
     size_t len;
     mp_obj_t *items;
