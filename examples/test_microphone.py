@@ -8,8 +8,8 @@ loop = asyncio.get_event_loop()
 from machine import I2S
 from machine import Pin
 import ustruct
-FFT_N=const(64)
-FFT_R=const(8000)
+FFT_N=const(128)
+FFT_R=const(16000)
 sck_pin = Pin(42)   # Serial clock output
 ws_pin = Pin(45)    # Word clock output
 sd_pin = Pin(46)    # Serial data output
@@ -36,8 +36,8 @@ async def main():
             num_read+=await sreader.readinto(buf_view[num_read:])
         samples=ustruct.unpack('<'+'h'*(FFT_N),buf)
         fft_plan.execute(samples)
-
-    print("耗时:",time.ticks_diff(time.ticks_ms(),start_ms))
+        #await asyncio.sleep_ms(FFT_R//FFT_N)
+    print(f"耗时:{time.ticks_diff(time.ticks_ms(),start_ms)}ms")
     #释放内存
     del fft_plan
 
