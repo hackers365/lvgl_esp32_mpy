@@ -728,7 +728,7 @@ int constrain(int x,int a,int b){
 static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *args) {
     ESP_LOGI(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = args[0];
-    ESP_LOGD(TAG,"FFT Get Pointer");
+    ESP_LOGI(TAG,"FFT Get Pointer");
     if(n_args!=5){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid arguments length:input,map_start,map_end,win_height"));
     }
@@ -736,7 +736,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     size_t len;
     mp_obj_t *items;
     mp_obj_get_array(args[1], &len, &items);
-    ESP_LOGD(TAG,"FFT Get Input len:%d",len);
+    ESP_LOGI(TAG,"FFT Get Input len:%d",len);
     if(len!=self->config->size){
         mp_raise_ValueError(MP_ERROR_TEXT("invalid len"));
     }
@@ -744,15 +744,15 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     int range_end=mp_obj_get_int(args[3]);
 
     int height=mp_obj_get_int(args[4]);
-    ESP_LOGD(TAG,"FFT COPY");
+    ESP_LOGI(TAG,"FFT COPY");
     // 复制输入数据
     for (size_t i = 0; i < len; i++) {
         self->config->input[i] = map(mp_obj_get_float(items[i]),INT16_MIN,INT16_MAX,range_start,range_end);
     }
-    ESP_LOGD(TAG,"FFT INPUT");
+    ESP_LOGI(TAG,"FFT INPUT");
 
     fft_execute(self->config);
-    ESP_LOGD(TAG,"FFT EXEC");
+    ESP_LOGI(TAG,"FFT EXEC");
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len/2, NULL);
     for (size_t i = 1; i <len/2; i++) {
@@ -761,7 +761,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
         magnitude=map(magnitude,0,range_end,0,height);
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
     }
-    ESP_LOGD(TAG,"FFT OK");
+    ESP_LOGI(TAG,"FFT OK");
     return result;
 }
 static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(lvgl_esp32_FFT_execute_fit_win_obj, 5, 5, lvgl_esp32_FFT_execute_fit_win);
