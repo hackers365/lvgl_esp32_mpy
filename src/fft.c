@@ -793,7 +793,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     ESP_LOGD(TAG,"FFT RESULT OK");
     return result;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(lvgl_esp32_FFT_execute_fit_win_obj, 5, 5, lvgl_esp32_FFT_execute_fit_win);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(lvgl_esp32_FFT_execute_fit_win_obj, 6, 6, lvgl_esp32_FFT_execute_fit_win);
 
 static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
     ESP_LOGD(TAG,"FFT execute");
