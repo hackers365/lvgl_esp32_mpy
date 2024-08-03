@@ -752,10 +752,9 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     ESP_LOGD(TAG,"FFT execute");
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     ESP_LOGD(TAG,"FFT Get Pointer");
-    if(n_args!=5){
-        mp_raise_ValueError(MP_ERROR_TEXT("invalid arguments length:input,map_start,map_end,win_height"));
+    if(n_args!=6){
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid arguments length:input,map_start,map_end,min_height,max_height"));
     }
-
     size_t len;
     mp_obj_t *items;
     mp_obj_get_array(args[1], &len, &items);
@@ -766,7 +765,10 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     int range_start=mp_obj_get_int(args[2]);
     int range_end=mp_obj_get_int(args[3]);
 
-    int height=mp_obj_get_int(args[4]);
+
+    int min_height=mp_obj_get_int(args[4]);
+    int max_height=mp_obj_get_int(args[5]);
+
     ESP_LOGD(TAG,"FFT COPY");
     // 复制输入数据
     for (size_t i = 0; i < len; i++) {
@@ -774,9 +776,9 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     }
     ESP_LOGD(TAG,"FFT INPUT");
     removeDC(self->config->input,self->config->size);
-    ESP_LOGI(TAG,"FFT removeDC");
+    ESP_LOGD(TAG,"FFT removeDC");
     hammingWindow(self->config->input,self->config->size);
-    ESP_LOGI(TAG,"FFT hammingWindow");
+    ESP_LOGD(TAG,"FFT hammingWindow");
     fft_execute(self->config);
     ESP_LOGD(TAG,"FFT fft_execute");
     // 创建返回列表
@@ -785,7 +787,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     for (size_t i = 1; i <len/2; i++) {
         double magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
         magnitude= constrain(magnitude,range_start,range_end);
-        magnitude= map(magnitude,range_start,range_end,0,height);
+        magnitude= map(magnitude,range_start,range_end,min_height,max_height);
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
     }
     ESP_LOGD(TAG,"FFT RESULT OK");
