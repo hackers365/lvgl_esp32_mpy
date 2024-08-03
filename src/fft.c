@@ -770,7 +770,7 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     ESP_LOGD(TAG,"FFT COPY");
     // 复制输入数据
     for (size_t i = 0; i < len; i++) {
-        self->config->input[i] = map(mp_obj_get_float(items[i]),INT16_MIN,INT16_MAX,range_start,range_end);
+        self->config->input[i] = mp_obj_get_float(items[i]);
     }
     ESP_LOGD(TAG,"FFT INPUT");
     removeDC(self->config->input,self->config->size);
@@ -783,8 +783,8 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     mp_obj_t result = mp_obj_new_list(len/2, NULL);
     for (size_t i = 1; i <len/2; i++) {
         double magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
-        magnitude= constrain(magnitude,0,range_end-range_start);
-        magnitude=map(magnitude,0,range_end-range_start,0,height);
+        /*magnitude= constrain(magnitude,0,range_end-range_start);
+        magnitude=map(magnitude,0,range_end-range_start,0,height);*/
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i-1), mp_obj_new_int(magnitude));
     }
     ESP_LOGD(TAG,"FFT RESULT OK");
@@ -810,7 +810,6 @@ static mp_obj_t lvgl_esp32_FFT_execute(mp_obj_t self_ptr, mp_obj_t input_list) {
         self->config->input[i] = mp_obj_get_float(items[i]);
     }
     ESP_LOGD(TAG,"FFT INPUT");
-    lvgl_esp32_FFT_removeDC()
     fft_execute(self->config);
     ESP_LOGD(TAG,"FFT EXEC");
 
