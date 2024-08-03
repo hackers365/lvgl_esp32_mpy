@@ -784,8 +784,8 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(0), mp_obj_new_int(self->config->output[0]));
     for (size_t i = 1; i <len/2; i++) {
         double magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
-        /*magnitude= constrain(magnitude,0,range_end-range_start);
-        magnitude=map(magnitude,0,range_end-range_start,0,height);*/
+        magnitude= constrain(magnitude,range_start,range_end);
+        magnitude= map(magnitude,range_start,range_end,0,height);
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
     }
     ESP_LOGD(TAG,"FFT RESULT OK");
