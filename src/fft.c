@@ -773,9 +773,9 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
         self->config->input[i] = map(mp_obj_get_float(items[i]),INT16_MIN,INT16_MAX,range_start,range_end);
     }
     ESP_LOGD(TAG,"FFT INPUT");
-    removeDC(self->config->input,self->config->size)
+    removeDC(self->config->input,self->config->size);
     ESP_LOGI(TAG,"FFT removeDC");
-    hammingWindow(self->config->input,self->config->size)
+    hammingWindow(self->config->input,self->config->size);
     ESP_LOGI(TAG,"FFT hammingWindow");
     fft_execute(self->config);
     ESP_LOGD(TAG,"FFT fft_execute");
