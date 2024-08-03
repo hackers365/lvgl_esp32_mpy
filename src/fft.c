@@ -719,6 +719,37 @@ float constrain(float x,float a,float b){
  if(x>b) return b;
  return x;
 }
+static mp_obj_t lvgl_esp32_FFT_removeDC(mp_obj_t self_ptr) {
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+    float avg = 0;
+    for (int k = 1 ; k < self->size ; k++) {
+        avg += self->config->input[k];
+    }
+    avg/= _size;
+    for (int k = 1 ; k < self->size; k++) {
+        self->config->input[k] -= avg;
+    }
+
+    return mp_obj_new_int_from_uint(0);
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_removeDC_obj, lvgl_esp32_FFT_removeDC);
+
+static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
+    lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
+
+    float samplesMinusOne = (float(self->size) - 1.0);
+    for (uint16_t i = 0; i < (self->size >> 1); i++) {
+        float indexMinusOne = float(i);
+        float ratio = (indexMinusOne / samplesMinusOne);
+        float weighingFactor = 0.54 - (0.46 * cos(TWO_PI * ratio));
+        self->config->input[i] *= weighingFactor;
+        self->config->input[i][self->size - (i + 1)] *= weighingFactor;
+    }
+    return mp_obj_new_int_from_uint(0);
+
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_hammingWindow_obj, lvgl_esp32_FFT_hammingWindow);
+
 /**
  * 直接输出振幅结果，需要一些范围映射参数
  * @param n_args
@@ -762,8 +793,8 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
         }else{
             magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
         }
-        magnitude= constrain(magnitude,0,range_end);
-        magnitude=map(magnitude,0,range_end,0,height);
+        magnitude= constrain(magnitude,0,range_end-range_start);
+        magnitude=map(magnitude,0,range_end-range_start,0,height);
         mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
     }
     ESP_LOGD(TAG,"FFT OK");
@@ -872,6 +903,10 @@ static const mp_rom_map_elem_t lvgl_esp32_FFT_locals_table[] = {
         { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&lvgl_esp32_FFT_deinit_obj) },
         { MP_ROM_QSTR(MP_QSTR_execute), MP_ROM_PTR(&lvgl_esp32_FFT_execute_obj) },
         { MP_ROM_QSTR(MP_QSTR_execute_fit_win), MP_ROM_PTR(&lvgl_esp32_FFT_execute_fit_win_obj) },
+        { MP_ROM_QSTR(MP_QSTR_removeDC), MP_ROM_PTR(&lvgl_esp32_FFT_removeDC_obj) },
+        { MP_ROM_QSTR(MP_QSTR_hammingWindow), MP_ROM_PTR(&lvgl_esp32_FFT_hammingWindow_obj) },
+
+
         //常量
         { MP_ROM_QSTR(MP_QSTR_REAL),          MP_ROM_INT(FFT_REAL) },
         { MP_ROM_QSTR(MP_QSTR_COMPLEX),       MP_ROM_INT(FFT_COMPLEX) },
