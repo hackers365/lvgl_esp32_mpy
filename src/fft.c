@@ -725,7 +725,7 @@ static mp_obj_t lvgl_esp32_FFT_removeDC(mp_obj_t self_ptr) {
     for (int k = 1 ; k < self->size ; k++) {
         avg += self->config->input[k];
     }
-    avg/= _size;
+    avg/= self->size;
     for (int k = 1 ; k < self->size; k++) {
         self->config->input[k] -= avg;
     }
@@ -736,7 +736,6 @@ static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_removeDC_obj, lvgl_esp32_FFT_rem
 
 static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-
     float samplesMinusOne = (float(self->size) - 1.0);
     for (uint16_t i = 0; i < (self->size >> 1); i++) {
         float indexMinusOne = float(i);
@@ -746,7 +745,6 @@ static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
         self->config->input[i][self->size - (i + 1)] *= weighingFactor;
     }
     return mp_obj_new_int_from_uint(0);
-
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_hammingWindow_obj, lvgl_esp32_FFT_hammingWindow);
 
