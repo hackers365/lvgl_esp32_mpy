@@ -743,7 +743,7 @@ static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
         float ratio = (indexMinusOne / samplesMinusOne);
         float weighingFactor = 0.54 - (0.46 * cos(TWO_PI * ratio));
         self->config->input[i] *= weighingFactor;
-        self->config->input[i][size- (i + 1)] *= weighingFactor;
+        self->config->input[size- (i + 1)] *= weighingFactor;
     }
     return mp_obj_new_int_from_uint(0);
 }
