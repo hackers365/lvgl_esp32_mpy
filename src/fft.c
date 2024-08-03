@@ -736,9 +736,9 @@ static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_removeDC_obj, lvgl_esp32_FFT_rem
 
 static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-    float samplesMinusOne = (float(self->size) - 1.0);
+    float samplesMinusOne = self->size - 1.0;
     for (uint16_t i = 0; i < (self->size >> 1); i++) {
-        float indexMinusOne = float(i);
+        float indexMinusOne = i;
         float ratio = (indexMinusOne / samplesMinusOne);
         float weighingFactor = 0.54 - (0.46 * cos(TWO_PI * ratio));
         self->config->input[i] *= weighingFactor;
@@ -784,16 +784,11 @@ static mp_obj_t lvgl_esp32_FFT_execute_fit_win(size_t n_args, const mp_obj_t *ar
     ESP_LOGD(TAG,"FFT EXEC");
     // 创建返回列表
     mp_obj_t result = mp_obj_new_list(len/2, NULL);
-    for (size_t i = 0; i <len/2; i++) {
-        double magnitude=0;
-        if(i==0){
-            magnitude= self->config->output[0];
-        }else{
-            magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
-        }
+    for (size_t i = 1; i <len/2; i++) {
+        double magnitude=sqrt(pow(self->config->output[2*i],2)+pow(self->config->output[2*i+1],2));
         magnitude= constrain(magnitude,0,range_end-range_start);
         magnitude=map(magnitude,0,range_end-range_start,0,height);
-        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i), mp_obj_new_int(magnitude));
+        mp_obj_list_store(result, MP_OBJ_NEW_SMALL_INT(i-1), mp_obj_new_int(magnitude));
     }
     ESP_LOGD(TAG,"FFT OK");
     return result;
