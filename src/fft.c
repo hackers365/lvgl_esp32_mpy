@@ -736,13 +736,14 @@ static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_removeDC_obj, lvgl_esp32_FFT_rem
 
 static mp_obj_t lvgl_esp32_FFT_hammingWindow(mp_obj_t self_ptr) {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
-    float samplesMinusOne = self->size - 1.0;
-    for (uint16_t i = 0; i < (self->size >> 1); i++) {
+    int size=self->size;
+    float samplesMinusOne = (float)size- 1.0;
+    for (uint16_t i = 0; i < (size >> 1); i++) {
         float indexMinusOne = i;
         float ratio = (indexMinusOne / samplesMinusOne);
         float weighingFactor = 0.54 - (0.46 * cos(TWO_PI * ratio));
         self->config->input[i] *= weighingFactor;
-        self->config->input[i][self->size - (i + 1)] *= weighingFactor;
+        self->config->input[i][size- (i + 1)] *= weighingFactor;
     }
     return mp_obj_new_int_from_uint(0);
 }
