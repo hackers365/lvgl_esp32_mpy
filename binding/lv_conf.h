@@ -575,9 +575,9 @@ extern void mp_lv_init_gc();
 
 #define LV_USE_CANVAS     1
 
-#define LV_USE_CHART      0
+#define LV_USE_CHART      1
 
-#define LV_USE_CHECKBOX   0
+#define LV_USE_CHECKBOX   1
 
 #define LV_USE_DROPDOWN   1   /*Requires: lv_label*/
 
@@ -594,15 +594,15 @@ extern void mp_lv_init_gc();
     #define LV_LABEL_WAIT_CHAR_COUNT 3  /*The count of wait chart*/
 #endif
 
-#define LV_USE_LED        0
+#define LV_USE_LED        1
 
-#define LV_USE_LINE       0
+#define LV_USE_LINE       1
 
-#define LV_USE_LIST       0
+#define LV_USE_LIST       1
 
-#define LV_USE_MENU       0
+#define LV_USE_MENU       1
 
-#define LV_USE_MSGBOX     0
+#define LV_USE_MSGBOX     1
 
 #define LV_USE_ROLLER     1   /*Requires: lv_label*/
 
@@ -627,11 +627,11 @@ extern void mp_lv_init_gc();
     #define LV_TEXTAREA_DEF_PWD_SHOW_TIME 1500    /*ms*/
 #endif
 
-#define LV_USE_TABLE      0
+#define LV_USE_TABLE      1
 
-#define LV_USE_TABVIEW    0
+#define LV_USE_TABVIEW    1
 
-#define LV_USE_TILEVIEW   0
+#define LV_USE_TILEVIEW   1
 
 #define LV_USE_WIN        0
 
