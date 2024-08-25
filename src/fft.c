@@ -126,6 +126,7 @@ void fft_destroy(fft_config_t *config)
 
   free(config->twiddle_factors);
   free(config);
+  config=NULL
 }
 
 void fft_execute(fft_config_t *config)
