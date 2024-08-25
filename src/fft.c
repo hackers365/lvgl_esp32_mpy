@@ -116,18 +116,18 @@ fft_config_t *fft_init(int size, fft_type_t type, fft_direction_t direction, flo
   return config;
 }
 
-void fft_destroy(fft_config_t *config)
-{
-  if (config->flags & FFT_OWN_INPUT_MEM)
-    free(config->input);
-
-  if (config->flags & FFT_OWN_OUTPUT_MEM)
-    free(config->output);
-
-  free(config->twiddle_factors);
-  free(config);
-  config=NULL;
-}
+//void fft_destroy(fft_config_t *config)
+//{
+//  if (config->flags & FFT_OWN_INPUT_MEM)
+//    free(config->input);
+//
+//  if (config->flags & FFT_OWN_OUTPUT_MEM)
+//    free(config->output);
+//
+//  free(config->twiddle_factors);
+//  free(config);
+//  config=NULL;
+//}
 
 void fft_execute(fft_config_t *config)
 {
@@ -843,7 +843,15 @@ static mp_obj_t lvgl_esp32_FFT_deinit(mp_obj_t self_ptr)
 {
     lvgl_esp32_FFT_obj_t *self = MP_OBJ_TO_PTR(self_ptr);
     if(self->config){
-        fft_destroy(self->config);
+        if (self->config->flags & FFT_OWN_INPUT_MEM)
+            free(self->config->input);
+
+        if (self->config->flags & FFT_OWN_OUTPUT_MEM)
+            free(self->config->output);
+
+        free(self->config->twiddle_factors);
+        free(self->config);
+        self->config=NULL;
     }
     ESP_LOGI(TAG, "Destroy FFT");
     return mp_obj_new_int_from_uint(0);
