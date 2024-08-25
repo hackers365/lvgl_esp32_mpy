@@ -852,8 +852,10 @@ static mp_obj_t lvgl_esp32_FFT_deinit(mp_obj_t self_ptr)
         free(self->config->twiddle_factors);
         free(self->config);
         self->config=NULL;
+        ESP_LOGI(TAG, "Destroy FFT");
+    }else{
+        ESP_LOGI(TAG, "Destroy FFT Object");
     }
-    ESP_LOGI(TAG, "Destroy FFT");
     return mp_obj_new_int_from_uint(0);
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(lvgl_esp32_FFT_deinit_obj, lvgl_esp32_FFT_deinit);
