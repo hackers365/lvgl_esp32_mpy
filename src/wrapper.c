@@ -4,50 +4,50 @@
 #include "esp_timer.h"
 #include "py/runtime.h"
 static const char *TAG = "lvgl_esp32_wrapper";
-static void  lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
-    //ESP_LOGI(TAG, "flush_cb: lv_draw_sw_rgb666_swap");
-    // RGB666 格式每个像素占 24 位，因此需要将缓冲区大小除以 3 以得到像素数量
-    uint32_t u32_cnt = buf_size_px / 3;
-    uint8_t * buf8 = buf;  // 8位指针
-
-    // 处理32位块（实际上是24位），每次处理8个像素
-    while (u32_cnt >= 8) {
-        uint8_t temp;
-
-        // 交换每个像素的字节
-        for (int i = 0; i < 8; i++) {
-            // 交换 RGB666 中的 R 和 B（8位）
-            temp = buf8[0];
-            buf8[0] = buf8[2];
-            buf8[2] = temp;
-            buf8 += 3;
-        }
-        u32_cnt -= 8;
-    }
-
-    // 处理剩余的像素
-    while (u32_cnt) {
-        uint8_t temp;
-
-        // 交换 RGB666 中的 R 和 B（8位）
-        temp = buf8[0];
-        buf8[0] = buf8[2];
-        buf8[2] = temp;
-        buf8 += 3;
-        u32_cnt--;
-    }
-
-    // 处理最后一个像素（如果有）
-    if (buf_size_px % 3 != 0) {
-        uint8_t e = buf_size_px - (buf_size_px % 3);
-        uint8_t temp;
-
-        // 交换 RGB666 中的 R 和 B（8位）
-        temp = buf8[e];
-        buf8[e] = buf8[e + 2];
-        buf8[e + 2] = temp;
-    }
-}
+//static void  lv_draw_sw_rgb666_swap(void * buf, uint32_t buf_size_px) {
+//    //ESP_LOGI(TAG, "flush_cb: lv_draw_sw_rgb666_swap");
+//    // RGB666 格式每个像素占 24 位，因此需要将缓冲区大小除以 3 以得到像素数量
+//    uint32_t u32_cnt = buf_size_px / 3;
+//    uint8_t * buf8 = buf;  // 8位指针
+//
+//    // 处理32位块（实际上是24位），每次处理8个像素
+//    while (u32_cnt >= 8) {
+//        uint8_t temp;
+//
+//        // 交换每个像素的字节
+//        for (int i = 0; i < 8; i++) {
+//            // 交换 RGB666 中的 R 和 B（8位）
+//            temp = buf8[0];
+//            buf8[0] = buf8[2];
+//            buf8[2] = temp;
+//            buf8 += 3;
+//        }
+//        u32_cnt -= 8;
+//    }
+//
+//    // 处理剩余的像素
+//    while (u32_cnt) {
+//        uint8_t temp;
+//
+//        // 交换 RGB666 中的 R 和 B（8位）
+//        temp = buf8[0];
+//        buf8[0] = buf8[2];
+//        buf8[2] = temp;
+//        buf8 += 3;
+//        u32_cnt--;
+//    }
+//
+//    // 处理最后一个像素（如果有）
+//    if (buf_size_px % 3 != 0) {
+//        uint8_t e = buf_size_px - (buf_size_px % 3);
+//        uint8_t temp;
+//
+//        // 交换 RGB666 中的 R 和 B（8位）
+//        temp = buf8[e];
+//        buf8[e] = buf8[e + 2];
+//        buf8[e + 2] = temp;
+//    }
+//}
 static void  flush_cb(lv_display_t *display, const lv_area_t *area, uint8_t *data)
 {
     lvgl_esp32_Wrapper_obj_t *self = (lvgl_esp32_Wrapper_obj_t *) lv_display_get_user_data(display);;
@@ -107,14 +107,14 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
     self->lv_display = lv_display_create(self->display->width, self->display->height);
 
     ESP_LOGI(TAG, "Creating display buffers");
-    self->buf_size = self->display->width*48;
+    self->buf_size = self->display->width*96;
     self->buf1 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
     assert(self->buf1);
-    self->buf2 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
-    assert(self->buf2);
+//    self->buf2 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
+//    assert(self->buf2);
 
     // initialize LVGL draw buffers
-    lv_display_set_buffers(self->lv_display, self->buf1, self->buf2, self->buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    lv_display_set_buffers(self->lv_display, self->buf1, NULL, self->buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     ESP_LOGI(TAG, "Registering callback functions");
     self->display->transfer_done_cb = transfer_done_cb;
