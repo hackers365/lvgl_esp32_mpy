@@ -106,11 +106,15 @@ static mp_obj_t lvgl_esp32_Wrapper_init(mp_obj_t self_ptr)
     ESP_LOGI(TAG, "Initializing LVGL display with size %dx%d", self->display->width, self->display->height);
     self->lv_display = lv_display_create(self->display->width, self->display->height);
 
-    ESP_LOGI(TAG, "Creating display buffers");
-    self->buf_size = self->display->width*48;
-    self->buf1 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
+    ESP_LOGI(TAG, "Creating display buffers with %d lines", self->buf_lines);
+    self->buf_size = self->display->width * self->buf_lines;
+    
+    // 根据参数选择内存分配方式
+    uint32_t malloc_caps = self->use_spiram ? MALLOC_CAP_SPIRAM : MALLOC_CAP_DMA;
+    
+    self->buf1 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), malloc_caps);
     assert(self->buf1);
-    self->buf2 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), MALLOC_CAP_DMA);
+    self->buf2 = heap_caps_malloc(self->buf_size * sizeof(lv_color_t), malloc_caps);
     assert(self->buf2);
 
     // initialize LVGL draw buffers
@@ -196,13 +200,16 @@ static mp_obj_t lvgl_esp32_Wrapper_make_new(
     enum
     {
         ARG_display,      // a display instance
-        ARG_touch,//a touch instance
+        ARG_touch,        // a touch instance
+        ARG_use_spiram,   // 是否使用 SPIRAM
+        ARG_buf_lines,    // 缓冲区行数系数
     };
 
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_display, MP_ARG_OBJ | MP_ARG_REQUIRED },
         { MP_QSTR_touch, MP_ARG_OBJ | MP_ARG_REQUIRED },
-
+        { MP_QSTR_use_spiram, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
+        { MP_QSTR_buf_lines, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 48} },  // 默认48行
     };
 
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
@@ -227,6 +234,10 @@ static mp_obj_t lvgl_esp32_Wrapper_make_new(
 
     self->lv_display = NULL;
     self->lv_indev = NULL;
+
+    self->use_spiram = args[ARG_use_spiram].u_bool;
+    self->buf_lines = args[ARG_buf_lines].u_int;
+    
     return MP_OBJ_FROM_PTR(self);
 }
 
