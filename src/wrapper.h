@@ -11,6 +11,8 @@ typedef struct lvgl_esp32_Wrapper_obj_t
     mp_obj_base_t base;
     lvgl_esp32_Display_obj_t *display;
     lvgl_esp32_Touch_obj_t *touch;
+    bool use_spiram;
+    uint32_t buf_lines;
 
     size_t buf_size;
     uint16_t *buf1;
